@@ -1,0 +1,132 @@
+/* Tailwind Styles for Button Components */
+
+.jtc-button {
+  @apply .flex .items-center .justify-between .px-3 .py-2;
+  @apply .border-2 .rounded-lg .font-medium .appearance-none;
+}
+
+.jtc-button:focus {
+  @apply .outline-none;
+}
+
+.jtc-button--loading {
+  @apply .cursor-not-allowed;
+}
+
+.jtc-button-spinner {
+  @apply .-ml-1 .mr-3 .h-5 .w-5 .text-white;
+}
+
+.jtc-button--light .jtc-button-spinner {
+  @apply .text-gray-700;
+}
+
+/* Colors ------------------------------------------------------------------ */
+
+@define-mixin buttonNormal $color {
+  @apply .bg-$(color)-600 .border-$(color)-600 .text-gray-200;
+  &:hover {
+    @apply .bg-$(color)-700 .border-$(color)-700 .text-white;
+  }
+
+  &.jtc-button--disabled,
+  &.jtc-button--loading,
+  &.jtc-button--disabled:hover,
+  &.jtc-button--loading:hover {
+    @apply .bg-$(color)-600 .border-$(color)-600 .text-gray-500;
+  }
+}
+
+@define-mixin buttonLight $color {
+  @apply .bg-transparent .border-$(color)-600 .text-gray-700;
+  &:hover {
+    @apply .bg-transparent .border-$(color)-700 .text-black;
+  }
+
+  &.jtc-button--disabled,
+  &.jtc-button--loading,
+  &.jtc-button--disabled:hover,
+  &.jtc-button--loading:hover {
+    @apply .bg-transparent .border-$(color)-600 .text-gray-500;
+  }
+}
+
+.jtc-button--gray {
+  @mixin buttonNormal gray;
+}
+
+.jtc-button--light-gray {
+  @mixin buttonLight gray;
+}
+
+.jtc-button--red {
+  @mixin buttonNormal red;
+}
+
+.jtc-button--light-red {
+  @mixin buttonLight red;
+}
+
+.jtc-button--orange {
+  @mixin buttonNormal orange;
+}
+
+.jtc-button--light-orange {
+  @mixin buttonLight orange;
+}
+
+.jtc-button--yellow {
+  @mixin buttonNormal yellow;
+}
+
+.jtc-button--light-yellow {
+  @mixin buttonLight yellow;
+}
+
+.jtc-button--green {
+  @mixin buttonNormal green;
+}
+
+.jtc-button--light-green {
+  @mixin buttonLight green;
+}
+
+.jtc-button--blue {
+  @mixin buttonNormal blue;
+}
+
+.jtc-button--light-blue {
+  @mixin buttonLight blue;
+}
+
+.jtc-button--indigo {
+  @mixin buttonNormal indigo;
+}
+
+.jtc-button--light-indigo {
+  @mixin buttonLight indigo;
+}
+
+.jtc-button--purple {
+  @mixin buttonNormal purple;
+}
+
+.jtc-button--light-purple {
+  @mixin buttonLight purple;
+}
+
+.jtc-button--teal {
+  @mixin buttonNormal teal;
+}
+
+.jtc-button--light-teal {
+  @mixin buttonLight teal;
+}
+
+.jtc-button--pink {
+  @mixin buttonNormal pink;
+}
+
+.jtc-button--light-pink {
+  @mixin buttonLight pink;
+}

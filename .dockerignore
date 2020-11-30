@@ -1,0 +1,5 @@
+# Ignore .git
+.git
+
+# Ignore NPM modules
+node_modules

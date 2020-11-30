@@ -1,0 +1,201 @@
+/* Tailwind Styles for Field Components */
+
+/* Field Layout */
+.jtc-field-wrapper {
+  @apply .flex;
+}
+
+.jtc-field-wrapper__before,
+.jtc-field-wrapper__after {
+  @apply .flex-grow-0;
+}
+
+.jtc-field-container {
+  @apply .flex-grow .flex .flex-col;
+}
+
+.jtc-field-container__top {
+  @apply .flex .items-end .justify-between .px-1;
+}
+
+.jtc-field-label,
+.jtc-field-hint {
+  @apply .text-xs .text-gray-800 .mb-1;
+}
+
+.jtc-field-label__checkbox {
+  @apply .text-xs .text-gray-800 .ml-1;
+}
+
+.jtc-field-hint {
+  @apply .font-medium .text-gray-800;
+}
+
+.jtc-field-label {
+  @apply .font-bold .uppercase;
+}
+
+.jtc-field-messages,
+.jtc-field-description {
+  @apply .px-1 .text-xs .text-gray-800 .font-light .leading-normal;
+}
+
+/* Floating Labels (Formulate) */
+.jtc-field-control__float {
+  @apply .transition .ease-in-out .duration-200;
+  @apply .rounded-t .text-sm;
+  @apply .w-full;
+  @apply .bg-transparent;
+  @apply .border-b-2 .border-gray-400;
+  @apply .appearance-none .outline-none;
+  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.21);
+  padding: 1.3rem 0.5rem 0.3rem;
+}
+
+.jtc-field-control__float:hover,
+.jtc-field-control__float:focus-within {
+  @apply .border-gray-500;
+}
+
+/* Floating Labels */
+.jtc-float-label {
+  @apply .transition .ease-in-out .duration-200;
+  @apply .rounded-t .text-sm;
+}
+
+.jtc-float-label:hover,
+.jtc-float-label:focus-within {
+  @apply .border-gray-500;
+}
+
+.jtc-float-label__input,
+.jtc-float-label .jtc-select-control {
+  @apply .w-full;
+  @apply .bg-transparent;
+  @apply .border-b-2 .border-gray-400;
+  @apply .appearance-none .outline-none;
+  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.21);
+  padding: 1.3rem 0.5rem 0.3rem;
+}
+
+.jtc-float-label:hover .jtc-float-label__input,
+.jtc-float-label:hover .jtc-float-label .jtc-select-control {
+  border-color: rgba(0, 0, 0, 0.31);
+}
+
+@media (max-width: 639px) {
+  .jtc-float-label .jtc-select-panel__open .jtc-select-control,
+  .jtc-float-label.jtc-danger .jtc-select-panel__open .jtc-select-control,
+  .jtc-float-label.jtc-success .jtc-select-panel__open .jtc-select-control {
+    @apply .p-0 .border-none;
+  }
+}
+
+.jtc-float-label__label {
+  @apply .block .relative .max-h-0 .font-medium .pointer-events-none;
+}
+
+.jtc-float-label__label > span {
+  @apply .sr-only;
+}
+
+.jtc-float-label .jtc-float-label__input::placeholder,
+.jtc-float-label .jtc-select-input::placeholder {
+  color: rgba(0, 0, 0, 0);
+}
+
+.jtc-float-label__label::before {
+  @apply .inline-block .relative .text-gray-800;
+  content: attr(data-content);
+  transform-origin: left top;
+  transition: transform 0.2s ease;
+  filter: blur(0);
+  left: 0.6em;
+}
+
+.jtc-float-label__label::after {
+  bottom: 1rem;
+  content: "";
+  height: 0.1rem;
+  position: absolute;
+  transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 180ms cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  opacity: 0;
+  left: 0;
+  top: 100%;
+  margin-top: -0.1rem;
+  transform: scale3d(0, 1, 1);
+  width: 100%;
+  background-color: theme('colors.blue.600');
+}
+
+.jtc-float-label__input:focus + .jtc-float-label__label::after,
+.jtc-focused + .jtc-float-label__label::after {
+  opacity: 1;
+  transform: scale3d(1, 1, 1);
+}
+
+@media (max-width: 639px) {
+  .jtc-select-panel__open .jtc-float-label__label,
+  .jtc-select-panel__open .jtc-float-label__label::after {
+    @apply hidden;
+  }
+  .jtc-select-panel__open .jtc-float-label__label::after {
+    opacity: 1;
+    transform: scale3d(0, 1, 1);
+  }
+}
+
+.jtc-float-label__input:placeholder-shown + .jtc-float-label__label::before,
+.jtc-placeholder-shown + .jtc-float-label__label::before {
+  transform: translate3d(0, -1.7rem, 0) scale3d(1, 1, 1);
+}
+
+.jtc-float-label__label::before,
+.jtc-float-label__input:focus + .jtc-float-label__label::before,
+.jtc-focused + .jtc-float-label__label::before {
+  transform: translate3d(0, -2.82rem, 0) scale3d(0.82, 0.82, 1);
+}
+
+.jtc-float-label__input:focus + .jtc-float-label__label::before,
+.jtc-focused + .jtc-float-label__label::before {
+  color: theme('colors.blue.600');
+}
+
+.jtc-float-hint {
+  @apply .block .relative .max-h-0 .pointer-events-none;
+}
+
+.jtc-float-hint > span {
+  @apply .sr-only;
+}
+
+.jtc-float-hint:before {
+  @apply .inline-block .absolute;
+  content: attr(data-content);
+  transform-origin: right top;
+  right: 0.5rem;
+  top: 0.5rem;
+}
+
+/* Field States */
+.jtc-field-message__danger,
+.jtc-field-label__danger,
+.jtc-field-hint__danger,
+.jtc-float-label__danger .jtc-float-label__label::before {
+  @apply .text-red-500;
+}
+
+.jtc-field-message__success,
+.jtc-field-label__success,
+.jtc-field-hint__success,
+.jtc-float-label__success .jtc-float-label__label::before {
+  @apply .text-green-500;
+}
+
+.jtc-field-message__warning,
+.jtc-field-label__warning,
+.jtc-field-hint__warning,
+.jtc-float-label__warning .jtc-float-label__label::before {
+  @apply .text-orange-500;
+}

@@ -1,0 +1,5 @@
+/* Tailwind Styles for Spinner Components */
+
+.jtc-spinner {
+  @apply .animate-spin;
+}

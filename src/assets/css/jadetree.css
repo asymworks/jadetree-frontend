@@ -1,0 +1,27 @@
+/*
+ * Jade Tree Personal Budgeting Application
+ *
+ * Copyright (c) 2020 Asymworks, LLC.
+ *
+ * Jade Tree may be freely distributed under the terms of the BSD license.  For
+ * all licensing information, details and documentation at https://jadetree.io
+ *
+ * Customized Tailwind CSS Theme
+ */
+
+/*! purgecss start ignore */
+@import "tailwindcss/base";
+@import "./defaults.css";
+@import "tailwindcss/components";
+/*! purgecss end ignore */
+
+/* Plugin Imports */
+@import "../../plugins/jt-controls/assets/tailwind/jt-controls.css";
+
+/* Custom Theme Imports */
+@import "./arrows.css";
+@import "./formulate.css";
+@import "./tooltip.css";
+
+/* Tailwind Utilities */
+@import "tailwindcss/utilities";

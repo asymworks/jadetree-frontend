@@ -1,0 +1,153 @@
+/* Tailwind Styles for Formulate Input Components */
+
+/* Formulate Overrides ----------------------------------------------------- */
+
+.formulate-input .formulate-input-element.formulate-input-element--group {
+  @apply max-w-full;
+}
+
+/* Float Field Inputs ------------------------------------------------------ */
+
+.formulate-input--float {
+  @apply .mb-4;
+  &:last-child {
+    @apply .mb-0;
+  }
+
+  /* C'mon formulate, most of these are mixins and don't need nesting... */
+  & .formulate-input-help {
+    color: #6d6d6d;
+    font-size: .7em;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-top: 0.25rem;
+  }
+
+  & .formulate-input-errors {
+    @apply .list-none .mt-1 .p-0;
+  }
+
+  & .formulate-input-error,
+  & .formulate-file-upload-error {
+    color: #960505;
+    font-size: .8em;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+}
+
+.formulate-float-label {
+  @apply .relative;
+  @apply .transition .ease-in-out .duration-200;
+  @apply .rounded-t .text-base;
+}
+
+.formulate-float-label > input,
+.formulate-float-label .jtc-control {
+  @apply .w-full;
+  @apply .bg-transparent;
+  @apply .border-b-2 .border-gray-400;
+  @apply .appearance-none .outline-none;
+  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.21);
+  padding: 1.3rem 0.5rem 0.1rem;
+}
+
+.formulate-float-label > textarea {
+  @apply .w-full;
+  @apply .border-b-2 .border-gray-400;
+  @apply .appearance-none .outline-none;
+  border-bottom: 0.1rem solid rgba(0, 0, 0, 0.21);
+  padding: 0 0.5rem 0.1rem;
+}
+
+.formulate-float-label.formulate-input-element--textarea {
+  padding-top: 1.3rem;
+}
+
+.formulate-float-label:hover > input,
+.formulate-float-label:hover > textarea,
+.formulate-float-label:hover .jtc-control {
+  border-color: rgba(0, 0, 0, 0.31);
+}
+
+@media (max-width: 639px) {
+  .formulate-float-label .jtc-select-panel__open .jtc-control {
+    @apply .p-0 .border-none;
+  }
+}
+
+.formulate-input-label--float {
+  @apply .block .max-h-0 .font-medium .pointer-events-none;
+}
+
+.formulate-input-label--float > span {
+  @apply .sr-only;
+}
+
+.formulate-float-label > input::placeholder,
+.formulate-float-label > textarea::placeholder,
+.formulate-float-label .jtc-control-input::placeholder {
+  color: rgba(0, 0, 0, 0);
+}
+
+.formulate-input-label--float::before {
+  @apply .inline-block .absolute .text-gray-800;
+  content: attr(data-content);
+  transform-origin: left top;
+  transition: transform 0.2s ease;
+  filter: blur(0);
+  left: 0.5em;
+  top: 0;
+}
+
+.formulate-input-label--float::after {
+  bottom: 1rem;
+  content: "";
+  height: 0.1rem;
+  position: absolute;
+  transition: transform 180ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 180ms cubic-bezier(0.4, 0, 0.2, 1), background-color 0.3s ease;
+  opacity: 0;
+  left: 0;
+  top: 100%;
+  margin-top: -0.1rem;
+  transform: scale3d(0, 1, 1);
+  width: 100%;
+  background-color: #41b883;
+}
+
+.formulate-float-label > input:focus,
+.formulate-float-label > textarea:focus,
+.formulate-float-label:hover .jtc-float-label .jtc-control {
+  border-color: rgba(0, 0, 0, 0.31);
+}
+
+@media (max-width: 639px) {
+  .jtc-select-panel__open .formulate-input-label--float,
+  .jtc-select-panel__open .formulate-input-label--float::after {
+    @apply hidden;
+  }
+  .jtc-select-panel__open .formulate-input-label--float::after {
+    opacity: 1;
+    transform: scale3d(0, 1, 1);
+  }
+}
+
+.formulate-float-label > input:placeholder-shown + .formulate-input-label--float::before,
+.formulate-float-label > textarea:placeholder-shown + .formulate-input-label--float::before,
+.jtc-placeholder-shown + .formulate-input-label--float::before {
+  transform: translate3d(0, 1.3rem, 0) scale3d(1, 1, 1);
+}
+
+.formulate-input-label--float::before,
+.formulate-float-label > input:focus + .formulate-input-label--float::before,
+.formulate-float-label > textarea:focus + .formulate-input-label--float::before,
+.jtc-control__focused + .formulate-input-label--float::before {
+  transform: translate3d(0, 0.25rem, 0) scale3d(0.82, 0.82, 1);
+}
+
+.formulate-float-label > input:focus + .formulate-input-label--float::before,
+.formulate-float-label > textarea:focus + .formulate-input-label--float::before,
+.jtc-control__focused + .formulate-input-label--float::before {
+  color: #41b883;
+}

@@ -1,0 +1,139 @@
+/* Tailwind Styles for Calendar Views */
+
+.jtc-calendar-wrapper {
+  @apply .flex .flex-col .items-stretch .justify-start .py-2;
+}
+
+.jtc-calendar-wrapper__day {
+  @apply .w-72;
+}
+
+.jtc-calendar-wrapper__month,
+.jtc-calendar-wrapper__year {
+  @apply .w-56;
+}
+
+@media (min-width: 640px) {
+  .jtc-calendar-wrapper__day {
+    @apply .w-64;
+  }
+}
+
+.jtc-calendar-header {
+  @apply .flex .items-center .justify-between .px-2 .pb-2;
+}
+
+.jtc-picker-control__container {
+  @apply .flex-grow .flex .justify-center;
+}
+
+.jtc-picker-control {
+  @apply .flex .items-center .justify-center;
+  @apply .text-gray-800 .rounded-full;
+}
+
+.jtc-picker-control:hover {
+  @apply .bg-gray-100;
+}
+
+.jtc-picker-control:first-child {
+  @apply .rounded-l-full;
+}
+
+.jtc-picker-control:last-child {
+  @apply .rounded-r-full;
+}
+
+.jtc-picker-control__month {
+  @apply .px-3 .pr-1 .font-medium .uppercase;
+  @apply .border-r;
+}
+
+.jtc-picker-control__year {
+  @apply .flex .items-center;
+  @apply .pl-1 .pr-1 .uppercase;
+}
+
+.jtc-picker-day {
+  @apply .grid .text-center .text-sm;
+}
+
+.jtc-picker-day__no-weeks {
+  @apply .grid-cols-7;
+}
+
+.jtc-picker-day__with-weeks {
+  @apply .grid-cols-8;
+}
+
+.jtc-picker-day-header,
+.jtc-picker-week-header {
+  @apply .text-center .font-medium .cursor-default;
+}
+
+.jtc-picker-week-header {
+}
+
+.jtc-picker-week-item {
+  @apply .flex .items-center .justify-end;
+  @apply .h-full .pr-1 .cursor-default;
+  @apply .border-r .text-gray-700 .text-center .text-sm .font-medium;
+}
+
+.jtc-picker-day-item {
+  @apply .appearance-none .outline-none;
+  @apply .flex .items-center .justify-center;
+  @apply .w-8 .h-8 .border .border-transparent .rounded-full;
+}
+
+.jtc-picker-month-item,
+.jtc-picker-year-item {
+  @apply .appearance-none .outline-none;
+  @apply .flex .items-center .justify-center;
+  @apply .h-8 .border .border-transparent .rounded-lg;
+}
+
+.jtc-picker-day-item:active,
+.jtc-picker-day-item:focus,
+.jtc-picker-month-item:active,
+.jtc-picker-month-item:focus,
+.jtc-picker-year-item:active,
+.jtc-picker-year-item:focus {
+  @apply .outline-none;
+}
+
+.jtc-picker-day-item__disabled {
+  @apply .text-gray-500 .cursor-default;
+}
+
+.jtc-picker-day-item__selectable,
+.jtc-picker-month-item__selectable,
+.jtc-picker-year-item__selectable {
+  @apply .cursor-pointer;
+}
+
+.jtc-picker-day-item__selectable:hover,
+.jtc-picker-month-item__selectable:hover,
+.jtc-picker-year-item__selectable:hover {
+  @apply .bg-blue-200;
+}
+
+.jtc-picker-day-item__selected,
+.jtc-picker-day-item__selected:hover,
+.jtc-picker-month-item__selected,
+.jtc-picker-month-item__selected:hover,
+.jtc-picker-year-item__selected,
+.jtc-picker-year-item__selected:hover {
+  @apply .bg-blue-500 .text-white;
+}
+
+.jtc-picker-day-item__today,
+.jtc-picker-month-item__today,
+.jtc-picker-year-item__today {
+  @apply .border-blue-500 .font-bold;
+}
+
+.jtc-picker-month,
+.jtc-picker-year {
+  @apply .grid .grid-cols-3 .text-center .text-sm;
+}

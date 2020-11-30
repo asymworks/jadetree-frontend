@@ -1,0 +1,24 @@
+upstream jadetree_api {
+  server ${JADETREE_API_HOST}:${JADETREE_API_PORT};
+}
+
+server {
+  listen       80;
+  listen  [::]:80;
+  server_name  jadetree;
+
+  location / {
+    root   /app;
+    index  index.html;
+    try_files $uri $uri/ /index.html;
+  }
+
+  location /api/ {
+    proxy_pass ${JADETREE_API_SCHEME}://jadetree_api${JADETREE_API_PATH}/;
+  }
+
+  error_page   500 502 503 504  /50x.html;
+  location = /50x.html {
+    root   /usr/share/nginx/html;
+  }
+}

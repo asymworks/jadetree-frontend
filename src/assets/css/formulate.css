@@ -1,0 +1,11 @@
+/* Formulate Field Overrides */
+
+.formulate-input[data-classification='box']
+.formulate-input-element.formulate-input-element--radio {
+  @apply .block .overflow-visible;
+}
+
+.formulate-input[data-classification='select']
+.formulate-input-element--jtSelect.formulate-input-element::before {
+  @apply .border-none;
+}
