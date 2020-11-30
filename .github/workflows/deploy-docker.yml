@@ -18,3 +18,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: asymworks/jadetree-frontend
         tag_with_ref: true
+        tags: |
+          asymworks/jadetree-frontend:0-alpha
+          asymworks/jadetree-frontend:0.9-alpha
