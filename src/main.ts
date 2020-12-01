@@ -4,7 +4,7 @@ import Vue from 'vue';
 import Notifications from 'vt-notifications';
 import VueFormulate from '@braid/vue-formulate';
 import VTooltip from 'v-tooltip';
-import JtControls, { JtFormulateLibrary } from './plugins/jt-controls';
+import { JtControls, JtFormulateLibrary } from '@jadetree/controls';
 
 // Load API
 import api from './api';

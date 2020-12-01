@@ -13,10 +13,11 @@
 @import "tailwindcss/base";
 @import "./defaults.css";
 @import "tailwindcss/components";
-/*! purgecss end ignore */
 
 /* Plugin Imports */
-@import "../../plugins/jt-controls/assets/tailwind/jt-controls.css";
+@import "@jadetree/controls/assets/tailwind/jt-controls.css";
+@import "@braid/vue-formulate/dist/snow.css";
+/*! purgecss end ignore */
 
 /* Custom Theme Imports */
 @import "./arrows.css";

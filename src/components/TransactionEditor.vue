@@ -269,8 +269,8 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { addMonths, format, parseISO } from 'date-fns';
+import { SelectOption } from '@jadetree/controls';
 import { Money } from '@jadetree/currency';
-import { SelectOption } from '@/plugins/jt-controls/components';
 import { budgetService, transactionService } from '@/api';
 import {
   AccountSchema,

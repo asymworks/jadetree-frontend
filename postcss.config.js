@@ -2,6 +2,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 const tailwindcss = require('tailwindcss');
+const postcssEasyImport = require('postcss-easy-import');
 const postcssMixins = require('postcss-mixins');
 const postcssPresetEnv = require('postcss-preset-env');
 const postcssPurgecss = require('@fullhuman/postcss-purgecss');
@@ -36,6 +37,7 @@ const purgecss = postcssPurgecss({
 
 module.exports = {
   plugins: [
+    postcssEasyImport,
     postcssMixins,
     tailwindcss,
     postcssPresetEnv({
