@@ -1,4 +1,4 @@
-import { ModalBus } from './plugins/jt-controls/helpers/eventBus';
+import { ModalBus } from '@jadetree/controls';
 
 declare module 'vue/types/vue' {
   type Notification = {
