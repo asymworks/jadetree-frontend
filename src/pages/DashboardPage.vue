@@ -202,7 +202,12 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
-import { addMonths, getDaysInMonth, getDate } from 'date-fns';
+import {
+  addMonths,
+  getDaysInMonth,
+  getDate,
+  isSameMonth,
+} from 'date-fns';
 import Decimal from 'decimal.js-light';
 import { Money } from '@jadetree/currency';
 import { budgetService } from '@/api';
@@ -246,6 +251,12 @@ export default class DashboardPage extends Vue {
   private userCurrency!: string;
   /* eslint-disable lines-between-class-members */
 
+  /** Current Display Date */
+  private displayDate: Date = new Date();
+
+  /** Display Update Timer */
+  private displayTimer: number | null = null;
+
   /** Current Outflows */
   get currentMonthOutflows(): Money {
     if (!this.currentMonthData) return new Money(0);
@@ -265,9 +276,8 @@ export default class DashboardPage extends Vue {
 
   /** Percent Time Elapsed */
   get percentElapsed(): Decimal {
-    const today = new Date();
-    return new Decimal(getDate(today))
-      .div(getDaysInMonth(today))
+    return new Decimal(getDate(this.displayDate))
+      .div(getDaysInMonth(this.displayDate))
       .mul(100)
       .toDecimalPlaces(1);
   }
@@ -298,9 +308,22 @@ export default class DashboardPage extends Vue {
       .toDecimalPlaces(1);
   }
 
+  /** Start a 1min timer to update dashboard */
+  mounted() {
+    this.displayTimer = setInterval(() => { this.updateDisplay(); }, 60000);
+  }
+
+  /** Clear Update Timer */
+  beforeDestroy() {
+    if (this.displayTimer !== null) {
+      clearInterval(this.displayTimer);
+      this.displayTimer = null;
+    }
+  }
+
   /** Get the Full Category Name */
   categoryName(categoryId: number): string {
-    const date = new Date();
+    const date = this.displayDate;
     const categories = this.findCategory(categoryId);
 
     if (!categories || categories.length === 0) return '';
@@ -336,6 +359,19 @@ export default class DashboardPage extends Vue {
       (acc, cur) => acc.add(cur.balance || new Money(0, this.userCurrency)),
       new Money(0, this.userCurrency),
     );
+  }
+
+  /** Update the Dashboard Display */
+  updateDisplay() {
+    const nextDate = new Date();
+    if (!isSameMonth(this.displayDate, nextDate)) {
+      console.log('changedMonth');
+      // Reload budget data for the new current month
+      const { dispatch } = this.$store;
+      dispatch('budget/loadBudgetData');
+    }
+
+    this.displayDate = nextDate;
   }
 }
 </script>

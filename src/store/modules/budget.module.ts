@@ -381,6 +381,9 @@ const budgetModule: Module<BudgetState, RootState> = {
   mutations: {
     clear(state: BudgetState) {
       state.budgets = [];
+      state.currentBudget = null;
+      state.currentMonthData = null;
+      state.displayMonthData = null;
     },
     collapsedGroup(state, groupId: number) {
       if (!state.collapseGroups.includes(groupId)) {

@@ -31,6 +31,7 @@
               :help="!!defaults.name
                 ? 'This field has been set by your system administrator and cannot be changed'
                 : ''"
+              autocomplete="name"
               label="Your Name"
               labelPosition="float"
               name="name"
@@ -44,6 +45,7 @@
               :help="!!defaults.email
                 ? 'This field has been set by your system administrator and cannot be changed'
                 : ''"
+              autocomplete="username"
               label="Email Address"
               labelPosition="float"
               name="email"
@@ -55,6 +57,7 @@
           <div v-if="mode && mode === 'public'" class="sm:flex sm:space-x-4 justify-between">
             <formulate-input
               :class="['w-full']"
+              autocomplete="new-password"
               label="Password"
               labelPosition="float"
               name="password"
@@ -68,6 +71,7 @@
             />
             <formulate-input
               :class="['w-full']"
+              autocomplete="new-password"
               label="Confirm Password"
               labelPosition="float"
               name="password_confirm"
