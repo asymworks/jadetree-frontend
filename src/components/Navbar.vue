@@ -41,7 +41,7 @@
               <div class="sm:absolute sm:hidden sm:group-hover:block sm:right-0 sm:py-3 sm:px-2 sm:w-40 sm:bg-gray-800 sm:rounded-b-md z-200">
                 <router-link to="/profile" class="navbar-button navbar-button__menu">Profile</router-link>
                 <router-link to="/settings" class="navbar-button navbar-button__menu">Settings</router-link>
-                <router-link to="/logout" class="navbar-button navbar-button__menu">Log Out</router-link>
+                <router-link v-if="serverMode !== 'personal'" to="/logout" class="navbar-button navbar-button__menu">Log Out</router-link>
               </div>
             </div>
           </div>
@@ -79,6 +79,9 @@ import { UserSchema } from '@/api/types';
     ...mapState({
       needsSetup: 'needsSetup',
     }),
+    ...mapState('api', {
+      serverMode: 'serverMode',
+    }),
   },
   directives: { clickAway },
 })
@@ -87,6 +90,7 @@ export default class Navbar extends Vue {
   private apiLoaded!: boolean;
   private loggedIn!: boolean;
   private needsSetup!: boolean;
+  private serverMode!: string;
   private user!: UserSchema;
   /* eslint-enable lines-between-class-members */
 

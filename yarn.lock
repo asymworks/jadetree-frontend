@@ -940,10 +940,10 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
-"@jadetree/controls@^0.9.2":
-  version "0.9.2"
-  resolved "https://registry.yarnpkg.com/@jadetree/controls/-/controls-0.9.2.tgz#c8fddb64232181362a8c0bef543af9700f9a10d5"
-  integrity sha512-ujgMIgZTK59aky3FO8ByzALT6IAX1yr6Y0xoRZRWbGMctwZsdf8VjFTv1iKD1jKNgNJELoJJ3pCLB/Juat+VVw==
+"@jadetree/controls@^0.9.4":
+  version "0.9.4"
+  resolved "https://registry.yarnpkg.com/@jadetree/controls/-/controls-0.9.4.tgz#8847671739ad09c21d818c4a2967f54eb2df3ba1"
+  integrity sha512-Aht3p7kzp9WydRaFqruanty6YKwpBf5yAdxlXd9LqAIMC931lunwbQJP6ZcjekViQhEJ916TDymSBjjKYvgP7A==
 
 "@jadetree/currency@^0.8.15":
   version "0.8.15"
@@ -7844,16 +7844,6 @@ postcss-import@^10.0.0:
   dependencies:
     object-assign "^4.0.1"
     postcss "^6.0.1"
-    postcss-value-parser "^3.2.3"
-    read-cache "^1.0.0"
-    resolve "^1.1.7"
-
-postcss-import@^12.0.1:
-  version "12.0.1"
-  resolved "https://registry.yarnpkg.com/postcss-import/-/postcss-import-12.0.1.tgz#cf8c7ab0b5ccab5649024536e565f841928b7153"
-  integrity sha512-3Gti33dmCjyKBgimqGxL3vcV8w9+bsHwO5UrBawp796+jdardbcFl4RP5w/76BwNL7aGzpKstIfF9I+kdE8pTw==
-  dependencies:
-    postcss "^7.0.1"
     postcss-value-parser "^3.2.3"
     read-cache "^1.0.0"
     resolve "^1.1.7"

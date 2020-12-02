@@ -1,6 +1,6 @@
 {
   "name": "@jadetree/frontend",
-  "version": "0.9.10-alpha",
+  "version": "0.9.11-alpha",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@braid/vue-formulate": "^2.4.5",
-    "@jadetree/controls": "^0.9.2",
+    "@jadetree/controls": "^0.9.4",
     "@jadetree/currency": "^0.8.15",
     "cldr-localenames-modern": "^37.0.0",
     "core-js": "^3.6.5",

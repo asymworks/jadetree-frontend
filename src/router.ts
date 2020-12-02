@@ -72,6 +72,15 @@ const router = new Router({
         requiresProfile: true,
       },
     },
+    {
+      path: '/transactions/:accountId',
+      component: TransactionPage,
+      meta: {
+        title: 'Transactions',
+        requiresLogin: true,
+        requiresProfile: true,
+      },
+    },
 
     // Redirect to home by default
     { path: '*', redirect: '/home' },

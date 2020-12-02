@@ -160,14 +160,23 @@
       </table>
     </template>
     <template v-slot:sidebar>
-      <div class="w-full text-lg font-medium">
-        <jt-select
-          id="accountSelect"
-          :clearButton="false"
-          :options="accountOptions"
-          :value="currentAccountValue"
-          @input="setCurrentAccount"
-        />
+      <div class="flex flex-row items-center justify-end w-full">
+        <div class="flex items-center font-medium text-lg flex-grow">
+          <jt-select
+            id="accountSelect"
+            :class="['w-full']"
+            :clearButton="false"
+            :options="accountOptions"
+            :value="currentAccountValue"
+            @input="setCurrentAccount"
+          />
+          <div v-if="currentAccount && currentAccount.notes" class="ml-2" v-tooltip="currentAccount.notes">
+            <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" class="document-text w-4 h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+          </div>
+        </div>
+        <button v-if="currentAccount" class="ml-3 md:ml-1 hover:text-blue-500 border-none active:outline-none focus:outline-none" v-tooltip="'Edit Account Information'" @click="openEditAccountDialog">
+          <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" class="pencil w-6 h-6 md:w-4 md:h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+        </button>
       </div>
       <div v-if="currentAccount" class="flex flex-col items-stretch w-full my-2">
         <div class="hidden sm:flex items-center justify-between w-full">
@@ -187,11 +196,13 @@
       </div>
       <div class="w-full mt-2">
         <jt-button
-          :class="['flex', 'items-center', 'justify-center', 'w-full']"
+          :class="['flex', 'items-center', 'justify-center']"
           color="blue"
+          size="small"
           type="button"
           @click="addTransaction"
         >
+          <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg>
           Add Transaction
         </jt-button>
       </div>
@@ -339,6 +350,16 @@ export default class TransactionPage extends Vue {
     );
   }
 
+  /** Set the Active Account from URI Path */
+  mounted() {
+    const { params } = this.$route;
+    if (params && params.accountId) {
+      const id = Number.parseInt(params.accountId, 10);
+      const { dispatch } = this.$store;
+      dispatch('account/setCurrentAccount', id);
+    }
+  }
+
   /** Get the name of an Account */
   accountName(accountId: number): string {
     const account = this.findAccount(accountId);
@@ -425,6 +446,16 @@ export default class TransactionPage extends Vue {
   /** Check if a Split Row is Expanded */
   isExpanded(key: string): boolean {
     return this.expandedRows.some((rowKey) => rowKey === key);
+  }
+
+  /** Open the Edit Account Dialog */
+  openEditAccountDialog(): void {
+    this.$notify({
+      group: 'top',
+      title: 'Not Implemented',
+      text: 'Account Editing is not yet implemented',
+      type: 'warning',
+    }, 5000);
   }
 
   /** Get Outflow Amount */

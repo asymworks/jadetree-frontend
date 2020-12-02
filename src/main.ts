@@ -66,6 +66,7 @@ Vue.use(VueFormulate, {
   },
 });
 
+Vue.config.performance = true;
 Vue.config.productionTip = false;
 
 async function startup() {

@@ -260,7 +260,7 @@ const budgetModule: Module<BudgetState, RootState> = {
       commit('clear');
     },
     onTransactionChanged({ dispatch }) {
-      return dispatch('loadBudgetMonth');
+      return dispatch('loadBudgetData');
     },
     setCurrentBudget({ commit, dispatch, state }, budgetId: number): Promise<void> {
       const budget = state.budgets.find((b) => b.id === budgetId);

@@ -6,7 +6,7 @@
   />
   <div v-else class="relative w-full max-w-5xl mx-auto">
     <div class="flex flex-row items-start md:space-x-2 md:px-2">
-      <div class="fixed bottom-0 inset-x-0 z-20 flex-none md:sticky md:top-0 md:py-2 md:inset-auto md:w-xs">
+      <div class="fixed bottom-0 inset-x-0 z-20 flex-none md:sticky md:top-0 md:py-2 md:inset-auto" style="width: 18rem;">
         <div class="flex flex-col items-start h-full p-2 bg-white border-t border-gray-800 md:border-gray-400 md:border md:rounded">
           <slot name="sidebar"></slot>
         </div>

@@ -7,7 +7,9 @@
     <div class="flex flex-col-reverse items-stretch space-x-0 space-y-2 space-y-reverse p-2 md:flex-row md:items-start md:space-x-2 md:space-y-0">
       <div class="flex-1 flex-grow border rounded bg-white p-4 md:max-w-sm">
         <div class="flex items-start justify-between">
-          <div class="text-lg font-medium">All Accounts</div>
+          <div class="text-lg font-medium">
+            <router-link to="/transactions">All Accounts</router-link>
+          </div>
           <div
             class="text-right text-lg font-medium"
             :class="{
@@ -41,7 +43,11 @@
                 :key="`acct-${budget.id}-${account.id}`"
                 class="flex items-start justify-between"
               >
-                <div>{{ account.name }}</div>
+                <div>
+                  <router-link :to="`/transactions/${account.id}`">
+                    {{ account.name }}
+                  </router-link>
+                </div>
                 <div
                   class="text-right"
                   :class="{
@@ -89,23 +95,26 @@
             </div>
           </template>
         </div>
-
-        <div class="mt-4">
-          <jt-button
-            :class="['flex', 'items-center', 'justify-center', 'w-full']"
-            color="blue"
-            type="button"
-            @click="openAccountDialog"
-          >
-            Add Account
-          </jt-button>
-        </div>
       </div>
       <div class="flex-1 flex-grow border rounded bg-white p-4">
         <div class="flex flex-col items-stretch">
-          <h1 class="text-lg font-medium">
-            {{ currentBudget ? currentBudget.name : '' }}
-          </h1>
+          <div class="flex flex-row flex-wrap items-center justify-between">
+            <h1 class="text-lg font-medium">
+              <router-link to="/budget">{{ currentBudget ? currentBudget.name : '' }}</router-link>
+            </h1>
+            <div>
+              <jt-button
+                :class="['flex', 'items-center', 'justify-center']"
+                color="blue"
+                size="small"
+                type="button"
+                @click="openTransactionDialog"
+              >
+                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd"></path></svg>
+                Add Transaction
+              </jt-button>
+            </div>
+          </div>
           <div class="text-sm text-gray-800 flex items-end justify-start mt-2">
             <div>
               <div class="font-light">Income</div>
@@ -220,6 +229,7 @@ import {
 } from '@/api/types';
 
 import AddAccountDialog from '../dialogs/AddAccountDialog.vue';
+import AddTransactionDialog from '../dialogs/AddTransactionDialog.vue';
 import JtStandardLayout from '../layouts/JtStandardLayout.vue';
 
 @Component({
@@ -353,6 +363,14 @@ export default class DashboardPage extends Vue {
     });
   }
 
+  /** Show the Add Transaction dialog */
+  openTransactionDialog() {
+    this.$modalEventBus.$emit('open', {
+      component: AddTransactionDialog,
+      options: { lockFocus: true },
+    });
+  }
+
   /** Sum Balances of Accounts */
   sumBalances(accounts: AccountSchema[]): Money {
     return accounts.reduce(
@@ -375,3 +393,9 @@ export default class DashboardPage extends Vue {
   }
 }
 </script>
+
+<style>
+.jtc-button.jtc-button--small {
+  @apply .px-2 .py-1 .text-sm;
+}
+</style>
