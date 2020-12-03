@@ -3,7 +3,7 @@
     v-if="error || loading"
     v-bind="{ error, errorTitle, loading, loadingTitle }"
   />
-  <div v-else class="relative w-full max-w-5xl mx-auto">
+  <div v-else class="flex-grow relative w-full max-w-5xl mx-auto">
     <slot name="default"></slot>
   </div>
 </template>

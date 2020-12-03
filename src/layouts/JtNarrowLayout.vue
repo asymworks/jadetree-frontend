@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-stretch sm:items-center">
+  <div class="flex-grow flex flex-col items-stretch sm:items-center">
     <div class="sm:w-full sm:max-w-xl m-4 p-4 border rounded-lg bg-white shadow">
       <slot name="default"></slot>
     </div>

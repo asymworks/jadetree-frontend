@@ -100,7 +100,7 @@ const mutations: MutationTree<RootState> = {
 
 /* Initialize data here so reactivity works */
 const state: RootState = {
-  version: 2,
+  version: process.env.PACKAGE_VERSION || 'unversioned',
 };
 
 /** Getters */
@@ -108,6 +108,10 @@ const getters = {
   apiError: (state: RootState): string | undefined => (state as FullState).api.status.error,
   apiLoading: (state: RootState): boolean => !!(state as FullState).api.status.loading,
   apiLoaded: (state: RootState): boolean => !!(state as FullState).api.status.loaded,
+  apiVersion: (state: RootState): string => (state as FullState).api.version,
+  appVersion: (state: RootState): string => state.version,
+  backendName: (state: RootState): string => (state as FullState).api.appName,
+  backendVersion: (state: RootState): string => (state as FullState).api.appVersion,
   loggedIn: (state: RootState): boolean => !!(state as FullState).auth.user,
   needsSetup: (state: RootState): boolean => !!(state as FullState).api.needsSetup,
   serverMode: (state: RootState): ServerMode | '' => (state as FullState).api.serverMode,
