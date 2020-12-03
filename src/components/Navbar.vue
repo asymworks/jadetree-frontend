@@ -74,11 +74,9 @@ import { UserSchema } from '@/api/types';
     ...mapGetters([
       'apiLoaded',
       'loggedIn',
+      'needsSetup',
       'user',
     ]),
-    ...mapState({
-      needsSetup: 'needsSetup',
-    }),
     ...mapState('api', {
       serverMode: 'serverMode',
     }),
