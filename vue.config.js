@@ -1,4 +1,7 @@
 /* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable import/no-extraneous-dependencies */
+
 const fs = require('fs');
 const webpack = require('webpack');
 
@@ -11,7 +14,7 @@ module.exports = {
     plugins: [
       new webpack.DefinePlugin({
         'process.env': {
-          PACKAGE_VERSION: '"' + version + '"',
+          PACKAGE_VERSION: `"${version}"`,
         },
       }),
     ],
