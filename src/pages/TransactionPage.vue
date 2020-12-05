@@ -46,7 +46,7 @@
                   {{ outflowAmount(t, t.amount).gt(0) ? formatCurrency(outflowAmount(t, t.amount)) : '' }}
                 </td>
                 <td class="flex items-center justify-end space-x-2">
-                  <button
+                  <button v-if="!t.reconciled"
                     class="appearance-none focus:outline-none active:outline-none"
                     :class="{
                       'text-gray-400 hover:text-black': !t.cleared && !t.reconciled,
@@ -56,13 +56,16 @@
                     v-tooltip="!t.cleared ? 'Mark as Cleared' : 'Mark as Uncleared'"
                     @click="clearTransaction(t)"
                   >
-                    <svg v-if="!t.reconciled" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <svg v-else class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  </button>
+                  <div v-else class="text-green-700" v-tooltip="`Reconciled on ${ formatShortDate(t.reconciled_at) }`">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                     </svg>
-                  </button>
+                  </div>
+
                   <button
                     class="appearance-none focus:outline-none active:outline-none text-gray-600 hover:text-black"
                     type="button"
@@ -101,7 +104,7 @@
                   {{ outflowAmount(t, t.amount).gt(0) ? formatCurrency(outflowAmount(t, t.amount)) : '' }}
                 </td>
                 <td class="flex items-center justify-end space-x-2">
-                  <button
+                  <button v-if="!t.reconciled"
                     class="appearance-none focus:outline-none active:outline-none"
                     :class="{
                       'text-gray-400 hover:text-black': !t.cleared && !t.reconciled,
@@ -111,13 +114,16 @@
                     v-tooltip="!t.cleared ? 'Mark as Cleared' : 'Mark as Uncleared'"
                     @click="clearTransaction(t)"
                   >
-                    <svg v-if="!t.reconciled" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
-                    <svg v-else class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                  </button>
+                  <div v-else class="text-green-700" v-tooltip="`Reconciled on ${ formatShortDate(t.reconciled_at) }`">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                       <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                     </svg>
-                  </button>
+                  </div>
+
                   <button
                     class="appearance-none focus:outline-none active:outline-none text-gray-600 hover:text-black"
                     type="button"
@@ -206,6 +212,18 @@
           Add Transaction
         </jt-button>
       </div>
+      <div v-if="currentAccount" class="w-full mt-2">
+        <jt-button
+          :class="['flex', 'items-center', 'justify-center']"
+          color="light-blue"
+          size="small"
+          type="button"
+          @click="startReconciliation"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+          Reconcile Account
+        </jt-button>
+      </div>
     </template>
   </jt-sidebar-layout>
 </template>
@@ -229,6 +247,7 @@ import JtSidebarLayout from '../layouts/JtSidebarLayout.vue';
 
 import AddTransactionDialog from '../dialogs/AddTransactionDialog.vue';
 import EditTransactionDialog from '../dialogs/EditTransactionDialog.vue';
+import ReconcileDialog from '../dialogs/ReconcileDialog.vue';
 
 type AccountListOption = {
   value: string | number;
@@ -481,6 +500,28 @@ export default class TransactionPage extends Vue {
     } else {
       const id = typeof value === 'string' ? Number.parseInt(value, 10) : value;
       dispatch('account/setCurrentAccount', id);
+    }
+  }
+
+  /** Start Reconciliation Process */
+  startReconciliation() {
+    const account = (this.currentAccount && this.currentAccount.id)
+      ? this.currentAccount.id
+      : null;
+
+    if (account === null) {
+      this.$notify({
+        group: 'top',
+        title: 'Account Required',
+        text: 'Select an account before reconciling.',
+        type: 'error',
+      }, 5000);
+    } else {
+      this.$modalEventBus.$emit('open', {
+        component: ReconcileDialog,
+        options: { lockFocus: true },
+        props: { account },
+      });
     }
   }
 

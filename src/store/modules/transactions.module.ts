@@ -8,6 +8,7 @@ import {
   ApiError,
   PayeeSchema,
   PayeeDetailSchema,
+  ReconcileSchema,
   TransactionSchema,
   TransactionLineSchema,
 } from '@/api/types';
@@ -153,6 +154,32 @@ const transactionsModule: Module<TransactionsState, RootState> = {
     },
     onLogin({ dispatch }) {
       return dispatch('loadPayees');
+    },
+    reconcileAccount(
+      { dispatch, commit, rootState },
+      { accountId, data }: { accountId: number; data: ReconcileSchema },
+    ): Promise<TransactionSchema[]> {
+      commit('loading');
+      return transactionService.reconcileAccount(accountId, data)
+        .then((data: TransactionSchema[]) => {
+          const { account } = (rootState as FullState);
+          if (account.currentAccount && account.currentAccount.id === accountId) {
+            dispatch('reload')
+              .then(() => dispatch(
+                'dispatchAll',
+                { actionName: 'onTransactionChanged' },
+                { root: true },
+              ));
+          } else {
+            dispatch('loaded');
+          }
+
+          return data;
+        })
+        .catch((error: ApiError) => {
+          commit('error', error);
+          throw error;
+        });
     },
     reload({ dispatch, rootState }) {
       const { account } = rootState as FullState;

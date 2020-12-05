@@ -39,6 +39,7 @@ export {
 export {
   PayeeSchema,
   PayeeDetailSchema,
+  ReconcileSchema,
   TransactionLineSchema,
   TransactionSplitSchema,
   TransactionSchema,

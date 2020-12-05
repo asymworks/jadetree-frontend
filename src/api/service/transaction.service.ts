@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns';
+import { format, formatISO, parseISO } from 'date-fns';
 import Decimal from 'decimal.js-light';
 import { Money } from '@jadetree/currency';
 import api from '../api';
@@ -11,9 +11,9 @@ export type TransactionLineSchema = {
   line_id?: number;
   account_id?: number;
   cleared?: boolean;
-  cleared_on?: string | Date | null;
+  cleared_at?: string | Date | null;
   reconciled?: boolean;
-  reconciled_on?: string | Date | null;
+  reconciled_at?: string | Date | null;
 }
 
 /** Transaction Split Schema */
@@ -47,12 +47,18 @@ export type TransactionSchema = {
   foreign_exchrate?: string | Decimal | null;
   splits?: TransactionSplitSchema[];
   cleared?: boolean;
-  cleared_on?: string | Date | null;
+  cleared_at?: string | Date | null;
   reconciled?: boolean;
-  reconciled_on?: string | Date | null;
+  reconciled_at?: string | Date | null;
   // Field Key Access
   [key: string]: string | number | boolean | Money | Date | Decimal |
     TransactionSplitSchema[] | null | undefined;
+}
+
+/** Account Reconciliation Schema */
+export type ReconcileSchema = {
+  statement_date: string | Date;
+  statement_balance: string | Money;
 }
 
 /** Payee Role */
@@ -89,11 +95,11 @@ function loadTransactionLineSchema(data: TransactionLineSchema): TransactionLine
   const loaded = { ...data };
 
   /* eslint-disable @typescript-eslint/camelcase */
-  if (typeof data.cleared_on === 'string') {
-    loaded.cleared_on = parseISO(data.cleared_on);
+  if (typeof data.cleared_at === 'string') {
+    loaded.cleared_at = parseISO(data.cleared_at);
   }
-  if (typeof data.reconciled_on === 'string') {
-    loaded.reconciled_on = parseISO(data.reconciled_on);
+  if (typeof data.reconciled_at === 'string') {
+    loaded.reconciled_at = parseISO(data.reconciled_at);
   }
   /* eslint-enable @typescript-eslint/camelcase */
 
@@ -140,11 +146,11 @@ function loadTransactionSchema(data: TransactionSchema): TransactionSchema {
   if (typeof data.date === 'string') {
     loaded.date = parseISO(data.date);
   }
-  if (typeof data.cleared_on === 'string') {
-    loaded.cleared_on = parseISO(data.cleared_on);
+  if (typeof data.cleared_at === 'string') {
+    loaded.cleared_at = parseISO(data.cleared_at);
   }
-  if (typeof data.reconciled_on === 'string') {
-    loaded.reconciled_on = parseISO(data.reconciled_on);
+  if (typeof data.reconciled_at === 'string') {
+    loaded.reconciled_at = parseISO(data.reconciled_at);
   }
 
   if (typeof data.foreign_exchrate === 'string') {
@@ -174,11 +180,11 @@ function dumpTransactionSchema(data: TransactionSchema): TransactionSchema {
   if (data.date instanceof Date) {
     dumped.date = format(data.date, 'yyyy-MM-dd');
   }
-  if (data.cleared_on instanceof Date) {
-    dumped.cleared_on = format(data.cleared_on, 'yyyy-MM-dd');
+  if (data.cleared_at instanceof Date) {
+    dumped.cleared_at = format(data.cleared_at, 'yyyy-MM-dd');
   }
-  if (data.reconciled_on instanceof Date) {
-    dumped.reconciled_on = format(data.reconciled_on, 'yyyy-MM-dd');
+  if (data.reconciled_at instanceof Date) {
+    dumped.reconciled_at = format(data.reconciled_at, 'yyyy-MM-dd');
   }
 
   if (data.foreign_exchrate instanceof Decimal) {
@@ -189,6 +195,22 @@ function dumpTransactionSchema(data: TransactionSchema): TransactionSchema {
   if (Array.isArray(data.splits) && data.splits.length > 0) {
     dumped.splits = data.splits.map((split) => dumpTransactionSplitSchema(split));
   }
+
+  return dumped;
+}
+
+/** Dump the Reconciliation Schema */
+function dumpReconcileSchema(data: ReconcileSchema): ReconcileSchema {
+  const dumped = { ...data };
+
+  /* eslint-disable @typescript-eslint/camelcase */
+  if (data.statement_date instanceof Date) {
+    dumped.statement_date = formatISO(data.statement_date);
+  }
+  if (data.statement_balance instanceof Money) {
+    dumped.statement_balance = data.statement_balance.amount.toFixed(4).toString();
+  }
+  /* eslint-enable @typescript-eslint/camelcase */
 
   return dumped;
 }
@@ -258,6 +280,15 @@ function createPayee(data: PayeeSchema): Promise<PayeeSchema> {
   return api.post<PayeeSchema>('/payees', data);
 }
 
+/** Reconcile an Account */
+function reconcileAccount(
+  accountId: number,
+  data: ReconcileSchema,
+): Promise<TransactionSchema[]> {
+  return api.post<TransactionSchema[]>(`/reconcile/${accountId}`, dumpReconcileSchema(data))
+    .then((response) => response.map((t) => loadTransactionSchema(t)));
+}
+
 export default {
   getAllTransactions,
   getAccountTransactions,
@@ -270,4 +301,5 @@ export default {
   getPayees,
   getPayeeDetails,
   createPayee,
+  reconcileAccount,
 };
