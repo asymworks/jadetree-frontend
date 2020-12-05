@@ -945,10 +945,10 @@
   resolved "https://registry.yarnpkg.com/@jadetree/controls/-/controls-0.9.4.tgz#8847671739ad09c21d818c4a2967f54eb2df3ba1"
   integrity sha512-Aht3p7kzp9WydRaFqruanty6YKwpBf5yAdxlXd9LqAIMC931lunwbQJP6ZcjekViQhEJ916TDymSBjjKYvgP7A==
 
-"@jadetree/currency@^0.8.15":
-  version "0.8.15"
-  resolved "https://registry.yarnpkg.com/@jadetree/currency/-/currency-0.8.15.tgz#ff352511bd81bff4ef8394da4735c09fec26f095"
-  integrity sha512-oU7g6l1UbsFuBfgfIhowxDkbH16UWkQHEHKJBwo/S/LDrnPy3jb56lGMQ2H7YT4rHne7dgl0PIU9sIwqUs48jw==
+"@jadetree/currency@^0.8.16":
+  version "0.8.16"
+  resolved "https://registry.yarnpkg.com/@jadetree/currency/-/currency-0.8.16.tgz#be1480cd82aeffe2b01ad5ad278634b4a1c084af"
+  integrity sha512-+zhnbBxbna0IlxGT3lOboPwJbk8fiEHod7hROJ8AoQH42usjSjmWatqSMGR2vK2qufmj2qtmtuATY1IepCQCsA==
   dependencies:
     decimal.js-light "^2.5.1"
 

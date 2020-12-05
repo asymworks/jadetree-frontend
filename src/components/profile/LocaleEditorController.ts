@@ -21,7 +21,11 @@ type Option = {
 
 /** Available Country Codes */
 const COUNTRIES_AVAILABLE: string[] = [
-  ...new Set(Available.map((tag) => parseLocale(tag).territory)),
+  ...new Set(
+    Available
+      .map((tag) => parseLocale(tag).territory || '')
+      .filter((cty) => cty !== ''),
+  ),
 ];
 
 /** Available Currency Codes */

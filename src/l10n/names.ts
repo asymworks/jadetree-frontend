@@ -9,16 +9,22 @@ export function languageName(key: string): string | unknown {
   return languageNamesEn.main.en.localeDisplayNames.languages[key];
 }
 
-export function scriptName(key: string): string | unknown {
-  return scriptNamesEn.main.en.localeDisplayNames.scripts[key];
+export function scriptName(key: string | undefined): string | unknown {
+  return key
+    ? scriptNamesEn.main.en.localeDisplayNames.scripts[key]
+    : '';
 }
 
-export function territoryName(key: string): string | unknown {
-  return territoryNamesEn.main.en.localeDisplayNames.territories[key];
+export function territoryName(key: string | undefined): string | unknown {
+  return key
+    ? territoryNamesEn.main.en.localeDisplayNames.territories[key]
+    : '';
 }
 
-export function variantName(key: string): string | unknown {
-  return variantNamesEn.main.en.localeDisplayNames.variants[key];
+export function variantName(key: string | undefined): string | unknown {
+  return key
+    ? variantNamesEn.main.en.localeDisplayNames.variants[key]
+    : '';
 }
 
 export function tagName(tag: string): string | unknown {

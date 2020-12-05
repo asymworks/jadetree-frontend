@@ -337,7 +337,8 @@ import JtNarrowLayout from '../layouts/JtNarrowLayout.vue';
 
 function getDefaultCountry(): string {
   if (navigator && navigator.languages) {
-    const locale = negotiateLocale(navigator.languages, Available, '-');
+    const langs = [...navigator.languages];
+    const locale = negotiateLocale(langs, Available, '-');
     if (locale) {
       const { territory } = parseLocale(locale, '-');
       if (territory) return territory;
