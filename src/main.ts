@@ -66,6 +66,7 @@ Vue.use(VueFormulate, {
   },
 });
 
+Vue.config.devtools = true;
 Vue.config.performance = true;
 Vue.config.productionTip = false;
 
