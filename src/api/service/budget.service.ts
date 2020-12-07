@@ -8,10 +8,10 @@ export type CategorySchema = {
   system?: boolean;
   hidden?: boolean;
   currency?: string;
-  notes?: string;
-  display_order?: number;
-  default_budget?: string | Money;
-  parent_id?: number;
+  notes?: string | null;
+  display_order?: number | null;
+  default_budget?: string | Money | null;
+  parent_id?: number | null;
   children?: CategorySchema[];
 }
 
