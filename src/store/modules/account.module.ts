@@ -10,13 +10,11 @@ import { AsyncStatus } from '../util';
 /** API State */
 export interface AccountState {
   accounts: AccountSchema[];
-  currentAccount: AccountSchema | null;
   status: AsyncStatus;
 }
 
 const state: AccountState = {
   accounts: [],
-  currentAccount: null,
   status: { },
 };
 
@@ -90,20 +88,10 @@ const accountModule: Module<AccountState, RootState> = {
         .catch((error: string) => commit('error', error));
     },
     onLogin({ dispatch }) {
-      return dispatch('loadAccounts')
-        .then(() => dispatch('setCurrentAccount', null));
+      return dispatch('loadAccounts');
     },
     onLogout({ commit }) {
       commit('clear');
-    },
-    setCurrentAccount({ commit, dispatch, state }, id: number) {
-      const account = state.accounts.find((a) => a.id === id);
-      commit('setCurrent', account || null);
-      dispatch(
-        'dispatchAll',
-        { actionName: 'onAccountChanged', actionPayload: account || null },
-        { root: true },
-      );
     },
   },
   mutations: {
@@ -128,9 +116,6 @@ const accountModule: Module<AccountState, RootState> = {
     loadedAccountList(state: AccountState, response: AccountSchema[]) {
       state.status = { loaded: true };
       state.accounts = response;
-    },
-    setCurrent(state: AccountState, account: AccountSchema | null) {
-      state.currentAccount = account;
     },
   },
 };

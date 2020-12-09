@@ -256,7 +256,7 @@
       </div>
       <jt-button
         :class="['flex items-center justify-center w-full sm:w-auto']"
-        :loading="submitLoading || transactionsLoading"
+        :loading="submitLoading || payeesLoading"
         color="blue"
         type="submit"
       >{{ submitText }}</jt-button>
@@ -271,7 +271,7 @@ import { mapGetters, mapState } from 'vuex';
 import { addMonths, format, parseISO } from 'date-fns';
 import { SelectOption } from '@jadetree/controls';
 import { Money } from '@jadetree/currency';
-import { budgetService, transactionService } from '@/api';
+import { budgetService, payeeService } from '@/api';
 import {
   AccountSchema,
   BudgetSchema,
@@ -339,12 +339,12 @@ export type TransactionData = {
   components: { CurrencyOptions },
   computed: {
     ...mapState('budget', ['currentBudget', 'currentMonthData']),
-    ...mapState('transactions', ['payees']),
+    ...mapState('payee', ['payees']),
     ...mapGetters(['userCurrency']),
     ...mapGetters('account', ['budgetAccounts', 'findAccount', 'offBudgetAccounts']),
     ...mapGetters('budget', ['findCategory']),
     ...mapGetters('l10n', ['formatCurrency', 'formatMonth']),
-    ...mapGetters('transactions', ['findPayee', 'transactionsLoading']),
+    ...mapGetters('payee', ['findPayee', 'payeesLoading']),
   },
 })
 export default class TransactionEditor extends Vue {
@@ -838,7 +838,7 @@ export default class TransactionEditor extends Vue {
           if (details && details.last_category_id) {
             this.categoryId = `${details.last_category_id}`;
           } else {
-            transactionService.getPayeeDetails(payee.id)
+            payeeService.getPayeeDetails(payee.id)
               .then((payeeDetails) => {
                 if (payeeDetails.last_category_id) {
                   this.categoryId = `${payeeDetails.last_category_id}`;

@@ -18,6 +18,8 @@
           <p><span class="font-medium">API Server:</span> {{ backendName }} {{ backendVersion }}</p>
           <p class="block px-2">|</p>
           <p><span class="font-medium">API Version:</span> {{ apiVersion }}</p>
+          <p class="block px-2">|</p>
+          <p><span class="font-medium">WebSocket:</span> {{ $socket.connected ? 'Connected' : 'Disconnected' }}</p>
         </div>
         <div class="flex items-center">
           <p class="font-light">
@@ -36,6 +38,7 @@
 </template>
 
 <script lang="ts">
+import { Socket } from 'vue-socket.io-extended';
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { getYear } from 'date-fns';
@@ -79,6 +82,21 @@ export default class App extends Vue {
     if (value && this.$router.currentRoute.path !== '/setup') {
       this.$router.replace('/setup');
     }
+  }
+
+  @Socket('create')
+  wsCreated(data: unknown) {
+    console.log('ws:create', data);
+  }
+
+  @Socket('delete')
+  wsDeleted(data: unknown) {
+    console.log('ws:delete', data);
+  }
+
+  @Socket('update')
+  wsUpdated(data: unknown) {
+    console.log('ws:update', data);
   }
 }
 </script>

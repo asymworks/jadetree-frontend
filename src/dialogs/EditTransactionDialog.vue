@@ -37,7 +37,7 @@ export default class EditTransactionDialog extends BaseTransactionDialog {
 
   /** Delete the Transaction Data */
   deleteTransaction() {
-    const { transaction_id: id } = this.transaction;
+    const { id } = this.transaction;
     this.$modalEventBus.$emit('open', {
       component: ConfirmDeleteTransactionDialog,
       options: { lockFocus: true },
@@ -88,14 +88,14 @@ export default class EditTransactionDialog extends BaseTransactionDialog {
   /** Update the Transaction Data */
   updateTransaction(txnSchema: TransactionData) {
     const { dispatch } = this.$store;
-    const { transaction_id: id } = this.transaction;
+    const { id } = this.transaction;
 
     this.handlePayee(txnSchema)
       .then((txnData) => this.createTransaction(txnData))
       .then((txnData) => this.diffTransaction(txnData, this.transaction))
       .then((data) => {
         if (Object.keys(data).length) {
-          return dispatch('transactions/updateTransaction', { id, data });
+          return dispatch('ledger/updateTransaction', { id, data });
         }
         return new Promise((resolve) => resolve());
       })

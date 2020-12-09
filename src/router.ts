@@ -58,7 +58,7 @@ const router = new Router({
     },
     {
       path: '/transactions',
-      component: () => import('./pages/TransactionPage.vue'),
+      component: () => import('./pages/LedgerPage.vue'),
       meta: {
         title: 'Transactions',
         requiresLogin: true,
@@ -67,7 +67,7 @@ const router = new Router({
     },
     {
       path: '/transactions/:accountId',
-      component: () => import('./pages/TransactionPage.vue'),
+      component: () => import('./pages/LedgerPage.vue'),
       meta: {
         title: 'Transactions',
         requiresLogin: true,

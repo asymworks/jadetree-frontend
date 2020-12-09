@@ -77,6 +77,11 @@ const authModule: Module<AuthState, RootState> = {
 
       // Set API Token
       apiWrapper.token = response.token;
+      if (apiWrapper.socket) {
+        // eslint-disable-next-line @typescript-eslint/camelcase
+        apiWrapper.socket.io.opts.query = { access_token: response.token };
+        apiWrapper.socket.open();
+      }
     },
     logoutRequest(state: AuthState) {
       state.token = '';
