@@ -2,120 +2,124 @@
 <template>
   <jt-sidebar-layout>
     <template v-slot:default>
-      <div class="hidden md:block sticky top-0 w-full h-2 bg-gray-100 z-10"><!-- mask space above totals header --></div>
-      <div
-        class="sticky top-0 md:top-2 flex flex-col justify-center z-10 h-12 w-full px-2 md:rounded-t text-white bg-blue-700"
-      >
-        <div class="flex flex-row items-center justify-end text-sm">
-          <div class="w-30% lg:w-20% flex-none px-2 text-right">Budgeted</div>
-          <div class="hidden lg:block lg:w-20% flex-none px-2 text-right">Outflow</div>
-          <div class="w-30% lg:w-20% flex-none px-2 text-right">Balance</div>
-        </div>
-        <div class="flex flex-row items-center justify-end font-bold">
-          <div class="flex-grow">
-            <div class="flex items-center justify-between">
-              Categories
-              <button
-                class="border-none focus:outline-none active:outline-none hover:text-gray-400"
-                v-tooltip="'Add a Category Group'"
-                @click="onAddGroupClick"
-              >
-                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
-              </button>
-            </div>
+      <div class="flex flex-col items-stretch justify-start h-full">
+        <div class="hidden md:block sticky top-0 w-full h-2 bg-gray-100 z-10"><!-- mask space above totals header --></div>
+        <div
+          class="sticky top-0 md:top-2 flex flex-col justify-center z-10 h-12 w-full px-2 md:rounded-t text-white bg-blue-700"
+        >
+          <div class="flex flex-row items-center justify-end text-sm">
+            <div class="w-30% lg:w-20% flex-none px-2 text-right">Budgeted</div>
+            <div class="hidden lg:block lg:w-20% flex-none px-2 text-right">Outflow</div>
+            <div class="w-30% lg:w-20% flex-none px-2 text-right">Balance</div>
           </div>
-          <div class="w-30% lg:w-20% flex-none px-2 text-right">
-            {{ displayMonthData ? formatCurrency(rollup(displayMonthData.categories).budget) : '' }}
-          </div>
-          <div class="hidden lg:block w-30% lg:w-20% flex-none px-2 text-right">
-            {{ displayMonthData ? formatCurrency(rollup(displayMonthData.categories).outflow.negate()) : '' }}
-          </div>
-          <div class="w-30% lg:w-20% flex-none px-2 text-right">
-            {{ displayMonthData ? formatCurrency(rollup(displayMonthData.categories).balance) : '' }}
-          </div>
-        </div>
-      </div>
-      <div class="relative pb-32 md:pb-0">
-        <template v-for="group in visibleGroups">
-          <div
-            class="sticky top-12 md:top-14 px-2 bg-blue-100 border-b border-gray-500 z-10 font-bold"
-            :key="group.id"
-          >
-            <!-- Category Header -->
-            <budget-row-item
-              :collapsed="isCollapsed(group.id)"
-              :isGroup="true"
-              :key="group.id"
-              v-bind="{
-                  name: translateName(group.name),
-                  notes: group.notes,
-                  ...rollup(
-                    group.children
-                      .filter((c) => !c.hidden)
-                      .map((c) => categoryData(c.id))
-                  ),
-                }"
-              @collapse-click="onCollapseClick(group.id)"
-              @name-click="onNameClick(group.id)"
-            >
-              <template v-slot:actions>
+          <div class="flex flex-row items-center justify-end font-bold">
+            <div class="flex-grow">
+              <div class="flex items-center justify-between">
+                Categories
                 <button
-                  class="border-none focus:outline-none active:outline-none hover:text-gray-600"
-                  v-tooltip="'Add a Category'"
-                  @click="onAddCategoryClick(group.id)"
+                  class="border-none focus:outline-none active:outline-none hover:text-gray-400"
+                  v-tooltip="'Add a Category Group'"
+                  @click="onAddGroupClick"
                 >
                   <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
                 </button>
-              </template>
-            </budget-row-item>
-          </div>
-          <template v-if="!isCollapsed(group.id)">
-            <div
-              v-for="child in sortedCategories(group.children)"
-              class="relative px-2 border-b border-gray-200 md:group"
-              :key="child.id"
-            >
-              <budget-entry-item
-                :key="child.id"
-                v-bind="{
-                    name: translateName(child.name),
-                    notes: child.notes,
-                    defaultBudget: categoryDefault(child.id),
-                    ...categoryData(child.id),
-                  }"
-                @dragStart="onCategoryDragStart($event, child)"
-                @budget-click="onBudgetClick(child.id)"
-                @name-click="onNameClick(child.id)"
-                @rollover-click="onRolloverClick(child.id)"
-              />
+              </div>
             </div>
-          </template>
-        </template>
-        <template v-if="hiddenCategories.length">
-          <div
-            class="sticky top-12 md:top-14 px-2 bg-blue-100 border-b border-gray-500 z-10 font-bold"
-            key="_hidden"
-          >
-            <!-- Category Header -->
-            <budget-row-item
-              key="_hidden"
-              v-bind="{
-                  name: 'Hidden Categories',
-                  ...rollup(hiddenCategoryData),
-                }"
-            >
-              <template v-slot:actions>
-                <button
-                  class="border-none focus:outline-none active:outline-none hover:text-gray-600"
-                  v-tooltip="`${hiddenCategoryCount} Hidden Categories`"
-                  @click="onUnhideClick"
-                >
-                  Unhide
-                </button>
-              </template>
-            </budget-row-item>
+            <div class="w-30% lg:w-20% flex-none px-2 text-right">
+              {{ displayMonthData ? formatCurrency(rollup(displayMonthData.categories).budget) : '' }}
+            </div>
+            <div class="hidden lg:block w-30% lg:w-20% flex-none px-2 text-right">
+              {{ displayMonthData ? formatCurrency(rollup(displayMonthData.categories).outflow.negate()) : '' }}
+            </div>
+            <div class="w-30% lg:w-20% flex-none px-2 text-right">
+              {{ displayMonthData ? formatCurrency(rollup(displayMonthData.categories).balance) : '' }}
+            </div>
           </div>
-        </template>
+        </div>
+        <div class="relative flex-grow">
+          <div class="absolute inset-0 overflow-auto">
+            <template v-for="group in visibleGroups">
+              <div
+                class="sticky top-0 px-2 bg-blue-100 border-b border-gray-500 z-10 font-bold"
+                :key="group.id"
+              >
+                <!-- Category Header -->
+                <budget-row-item
+                  :collapsed="isCollapsed(group.id)"
+                  :isGroup="true"
+                  :key="group.id"
+                  v-bind="{
+                      name: translateName(group.name),
+                      notes: group.notes,
+                      ...rollup(
+                        group.children
+                          .filter((c) => !c.hidden)
+                          .map((c) => categoryData(c.id))
+                      ),
+                    }"
+                  @collapse-click="onCollapseClick(group.id)"
+                  @name-click="onNameClick(group.id)"
+                >
+                  <template v-slot:actions>
+                    <button
+                      class="border-none focus:outline-none active:outline-none hover:text-gray-600"
+                      v-tooltip="'Add a Category'"
+                      @click="onAddCategoryClick(group.id)"
+                    >
+                      <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"></path></svg>
+                    </button>
+                  </template>
+                </budget-row-item>
+              </div>
+              <template v-if="!isCollapsed(group.id)">
+                <div
+                  v-for="child in sortedCategories(group.children)"
+                  class="relative px-2 border-b border-gray-200 md:group"
+                  :key="child.id"
+                >
+                  <budget-entry-item
+                    :key="child.id"
+                    v-bind="{
+                        name: translateName(child.name),
+                        notes: child.notes,
+                        defaultBudget: categoryDefault(child.id),
+                        ...categoryData(child.id),
+                      }"
+                    @dragStart="onCategoryDragStart($event, child)"
+                    @budget-click="onBudgetClick(child.id)"
+                    @name-click="onNameClick(child.id)"
+                    @rollover-click="onRolloverClick(child.id)"
+                  />
+                </div>
+              </template>
+            </template>
+            <template v-if="hiddenCategories.length">
+              <div
+                class="sticky top-12 md:top-14 px-2 bg-blue-100 border-b border-gray-500 z-10 font-bold"
+                key="_hidden"
+              >
+                <!-- Category Header -->
+                <budget-row-item
+                  key="_hidden"
+                  v-bind="{
+                      name: 'Hidden Categories',
+                      ...rollup(hiddenCategoryData),
+                    }"
+                >
+                  <template v-slot:actions>
+                    <button
+                      class="border-none focus:outline-none active:outline-none hover:text-gray-600"
+                      v-tooltip="`${hiddenCategoryCount} Hidden Categories`"
+                      @click="onUnhideClick"
+                    >
+                      Unhide
+                    </button>
+                  </template>
+                </budget-row-item>
+              </div>
+            </template>
+          </div>
+        </div>
       </div>
     </template>
     <template v-slot:sidebar>

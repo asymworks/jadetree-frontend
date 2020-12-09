@@ -19,6 +19,9 @@ declare module 'vue-clickaway' {
   export { directive };
 }
 
+declare module 'vue-virtual-scroll-list' {
+}
+
 declare module 'md5' {
   function md5(data: string): string;
   export default md5;
