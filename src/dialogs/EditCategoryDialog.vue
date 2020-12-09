@@ -79,7 +79,7 @@ type CategoryData = {
   defaultBudget?: string;
   hidden?: boolean;
   system?: boolean;
-  notes?: string;
+  notes?: string | null;
 };
 
 @Component({

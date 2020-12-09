@@ -18,6 +18,8 @@
           <p><span class="font-medium">API Server:</span> {{ backendName }} {{ backendVersion }}</p>
           <p class="block px-2">|</p>
           <p><span class="font-medium">API Version:</span> {{ apiVersion }}</p>
+          <p class="block px-2">|</p>
+          <p><span class="font-medium">WebSocket:</span> {{ $socket.connected ? 'Connected' : 'Disconnected' }}</p>
         </div>
         <div class="flex items-center">
           <p class="font-light">
@@ -36,6 +38,7 @@
 </template>
 
 <script lang="ts">
+import { Socket } from 'vue-socket.io-extended';
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import { mapGetters } from 'vuex';
 import { getYear } from 'date-fns';
@@ -43,6 +46,11 @@ import { getYear } from 'date-fns';
 import Navbar from './components/Navbar.vue';
 import LoadingPage from './pages/LoadingPage.vue';
 import JtNotificationGroup from './layouts/JtNotificationGroup.vue';
+
+type SocketEvent = {
+  class: string;
+  items: unknown[];
+}
 
 @Component({
   components: { JtNotificationGroup, LoadingPage, Navbar },
@@ -79,6 +87,34 @@ export default class App extends Vue {
     if (value && this.$router.currentRoute.path !== '/setup') {
       this.$router.replace('/setup');
     }
+  }
+
+  @Socket('create')
+  wsCreated(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsDelete${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
+  }
+
+  @Socket('delete')
+  wsDeleted(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsDelete${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
+  }
+
+  @Socket('update')
+  wsUpdated(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsUpdate${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
+  }
+
+  @Socket('clear')
+  wsChangedTransaction(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsClear${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
   }
 }
 </script>

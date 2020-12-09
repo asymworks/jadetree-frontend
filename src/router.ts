@@ -3,13 +3,6 @@ import Router, { Route, RouteRecord } from 'vue-router';
 
 import store from './store';
 
-import BudgetPage from './pages/BudgetPage.vue';
-import DashboardPage from './pages/DashboardPage.vue';
-import LoginPage from './pages/LoginPage.vue';
-import SetupPage from './pages/SetupPage.vue';
-import TransactionPage from './pages/TransactionPage.vue';
-import UserOnboardPage from './pages/UserOnboardPage.vue';
-
 Vue.use(Router);
 
 const router = new Router({
@@ -19,7 +12,7 @@ const router = new Router({
     // Server Setup Page
     {
       path: '/setup',
-      component: SetupPage,
+      component: () => import('./pages/SetupPage.vue'),
       meta: {
         title: 'Server Setup',
       },
@@ -28,7 +21,7 @@ const router = new Router({
     // Login and Logout Pages
     {
       path: '/login',
-      component: LoginPage,
+      component: () => import('./pages/LoginPage.vue'),
       meta: {
         title: 'Login',
       },
@@ -37,7 +30,7 @@ const router = new Router({
     // Onboarding Page
     {
       path: '/onboard',
-      component: UserOnboardPage,
+      component: () => import('./pages/UserOnboardPage.vue'),
       meta: {
         title: 'Welcome',
         requiresLogin: true,
@@ -47,7 +40,7 @@ const router = new Router({
     // Protected Pages
     {
       path: '/home',
-      component: DashboardPage,
+      component: () => import('./pages/DashboardPage.vue'),
       meta: {
         title: 'Dashboard',
         requiresLogin: true,
@@ -56,7 +49,7 @@ const router = new Router({
     },
     {
       path: '/budget',
-      component: BudgetPage,
+      component: () => import('./pages/BudgetPage.vue'),
       meta: {
         title: 'Budget',
         requiresLogin: true,
@@ -65,7 +58,7 @@ const router = new Router({
     },
     {
       path: '/transactions',
-      component: TransactionPage,
+      component: () => import('./pages/LedgerPage.vue'),
       meta: {
         title: 'Transactions',
         requiresLogin: true,
@@ -74,7 +67,7 @@ const router = new Router({
     },
     {
       path: '/transactions/:accountId',
-      component: TransactionPage,
+      component: () => import('./pages/LedgerPage.vue'),
       meta: {
         title: 'Transactions',
         requiresLogin: true,

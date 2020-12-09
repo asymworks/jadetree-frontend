@@ -2,7 +2,7 @@
   <jt-dialog title="Add Transaction">
     <transaction-editor
       :account="account"
-      :submitLoading="transactionsLoading"
+      :submitLoading="ledgerLoading"
       submitText="Add Transaction"
       @cancel="close"
       @submit="submit"
@@ -19,7 +19,7 @@ import TransactionEditor, { TransactionData } from '../components/TransactionEdi
 @Component({
   components: { TransactionEditor },
   computed: {
-    ...mapGetters('transactions', ['transactionsLoading']),
+    ...mapGetters('ledger', ['ledgerLoading']),
   },
 })
 export default class AddTransactionDialog extends BaseTransactionDialog {
@@ -33,7 +33,7 @@ export default class AddTransactionDialog extends BaseTransactionDialog {
 
     this.handlePayee(data)
       .then((txnData) => this.createTransaction(txnData))
-      .then((txnSchema) => dispatch('transactions/createTransaction', txnSchema))
+      .then((txnSchema) => dispatch('ledger/createTransaction', txnSchema))
       .then(() => {
         this.close();
       })
