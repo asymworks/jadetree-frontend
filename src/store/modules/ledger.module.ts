@@ -91,7 +91,7 @@ const ledgerModule: Module<LedgerState, RootState> = {
     onAccountChanged({ dispatch }) {
       return dispatch('reload');
     },
-    onLogin({ dispatch }) {
+    onAccountsLoaded({ dispatch }) {
       let id: number | null = null;
 
       const curAcctId = localStorage.getItem('currentAccount');

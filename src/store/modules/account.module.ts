@@ -81,10 +81,15 @@ const accountModule: Module<AccountState, RootState> = {
         .then((account: AccountSchema) => commit('loadedAccountItem', account))
         .catch((error: string) => commit('error', error));
     },
-    loadAccounts({ commit }): Promise<void> {
+    loadAccounts({ commit, dispatch }): Promise<void> {
       commit('loading');
       return accountService.getAccounts()
         .then((accounts: AccountSchema[]) => commit('loadedAccountList', accounts))
+        .then(() => dispatch(
+          'dispatchAll',
+          { actionName: 'onAccountsLoaded' },
+          { root: true },
+        ))
         .catch((error: string) => commit('error', error));
     },
     onLogin({ dispatch }) {
