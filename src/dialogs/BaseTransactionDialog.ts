@@ -13,7 +13,7 @@ import { TransactionData } from '../components/TransactionEditor.vue';
 @Component({
   computed: {
     ...mapGetters('account', ['findAccount']),
-    ...mapGetters('transactions', ['findPayee']),
+    ...mapGetters('payee', ['findPayee']),
   },
 })
 export default class BaseTransactionDialog extends BaseDialog {
@@ -25,7 +25,7 @@ export default class BaseTransactionDialog extends BaseDialog {
   /** Create a new Payee */
   createPayee(payee: PayeeSchema): Promise<PayeeSchema> {
     const { dispatch } = this.$store;
-    return dispatch('transactions/createPayee', payee);
+    return dispatch('payee/createPayee', payee);
   }
 
   /** Create Transaction Schema from Editor Data */

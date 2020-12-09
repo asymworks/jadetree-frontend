@@ -15,7 +15,7 @@
         >Cancel</jt-button>
         <jt-button
           :class="['flex items-center justify-center w-full sm:w-auto']"
-          :loading="transactionsLoading"
+          :loading="ledgerLoading"
           color="red"
           type="button"
           @click.stop="onDelete"
@@ -32,7 +32,7 @@ import BaseDialog from './BaseDialog';
 
 @Component({
   computed: {
-    ...mapGetters('transactions', ['transactionsLoading']),
+    ...mapGetters('ledger', ['ledgerLoading']),
   },
 })
 export default class ConfirmDeleteTransactionDialog extends BaseDialog {
@@ -45,7 +45,7 @@ export default class ConfirmDeleteTransactionDialog extends BaseDialog {
     const { transactionId } = this;
     const { dispatch } = this.$store;
 
-    dispatch('transactions/deleteTransaction', transactionId)
+    dispatch('ledger/deleteTransaction', transactionId)
       .then(() => {
         this.$notify({
           group: 'top',

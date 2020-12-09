@@ -247,20 +247,8 @@ const budgetModule: Module<BudgetState, RootState> = {
         }))
         .catch((error) => commit('error', error));
     },
-    onAccountCreated({ dispatch }) {
-      return dispatch('loadBudgets');
-    },
-    onAccountDeleted({ dispatch }) {
-      return dispatch('loadBudgets');
-    },
     onLogin({ dispatch }) {
       return dispatch('loadBudgets');
-    },
-    onLogout({ commit }) {
-      commit('clear');
-    },
-    onTransactionChanged({ dispatch }) {
-      return dispatch('loadBudgetData');
     },
     setCurrentBudget({ commit, dispatch, state }, budgetId: number): Promise<void> {
       const budget = state.budgets.find((b) => b.id === budgetId);
@@ -376,6 +364,15 @@ const budgetModule: Module<BudgetState, RootState> = {
           commit('error', error);
           throw error;
         });
+    },
+    wsCreateTransaction({ dispatch }) {
+      return dispatch('loadBudgetData');
+    },
+    wsDeleteTransaction({ dispatch }) {
+      return dispatch('loadBudgetData');
+    },
+    wsUpdateTransaction({ dispatch }) {
+      return dispatch('loadBudgetData');
     },
   },
   mutations: {

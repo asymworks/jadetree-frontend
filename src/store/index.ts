@@ -15,7 +15,8 @@ import { ApiState } from './modules/api.module';
 import { AuthState } from './modules/auth.module';
 import { BudgetState } from './modules/budget.module';
 import { L10nState } from './modules/l10n.module';
-import { TransactionsState } from './modules/transactions.module';
+import { LedgerState } from './modules/ledger.module';
+import { PayeeState } from './modules/payee.module';
 import modules from './modules';
 
 Vue.use(Vuex);
@@ -84,7 +85,8 @@ export interface FullState extends RootState {
   auth: AuthState;
   budget: BudgetState;
   l10n: L10nState;
-  transactions: TransactionsState;
+  ledger: LedgerState;
+  payees: PayeeState;
 }
 
 /** Root Actions */

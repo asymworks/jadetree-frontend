@@ -2,9 +2,11 @@ import Vue from 'vue';
 
 // Load Plugins
 import Notifications from 'vt-notifications';
-import VueFormulate from '@braid/vue-formulate';
 import VTooltip from 'v-tooltip';
+import VueFormulate from '@braid/vue-formulate';
+import VueSocketIOExt from 'vue-socket.io-extended';
 import { JtControls, JtFormulateLibrary } from '@jadetree/controls';
+import io from 'socket.io-client';
 
 // Load API
 import api from './api';
@@ -21,7 +23,7 @@ import App from './App.vue';
 
 // Configuration Schema
 type JadeTreeConfig = {
-  apiurl?: string;
+  apiurl: string;
 };
 
 // Configuration Loader
@@ -85,6 +87,10 @@ async function startup() {
   }
 
   api.baseUrl = config.apiurl;
+  api.socket = io(config.apiurl, { autoConnect: false });
+
+  // Setup SocketIO
+  Vue.use(VueSocketIOExt, api.socket);
 
   // Initialize Vuex Modules
   store.dispatch('dispatchAll', { actionName: 'startup' });

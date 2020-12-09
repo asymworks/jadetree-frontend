@@ -1,3 +1,4 @@
+import { Socket } from 'socket.io-client';
 import { ApiError, ApiErrorSchema } from './error';
 
 /** API Options */
@@ -9,6 +10,9 @@ export type ApiOptions = {
 export class Api {
   /** API Base URL */
   baseUrl?: string;
+
+  /** WebSocket Client */
+  socket?: typeof Socket;
 
   /** Authorization Token */
   token?: string;

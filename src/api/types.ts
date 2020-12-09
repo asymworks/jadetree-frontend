@@ -15,6 +15,7 @@ export {
   AccountSubtype,
   AccountSubtypeOption,
   AccountType,
+  AccountRole,
 } from './service/account.service';
 
 export {
@@ -33,13 +34,21 @@ export {
 } from './service/budget.service';
 
 export {
-  SetupSchema,
-} from './service/setup.service';
+  LedgerEntrySchema,
+} from './service/ledger.service';
 
 export {
   PayeeSchema,
   PayeeDetailSchema,
+} from './service/payee.service';
+
+export {
+  SetupSchema,
+} from './service/setup.service';
+
+export {
   ReconcileSchema,
+  TransactionClearanceSchema,
   TransactionLineSchema,
   TransactionSplitSchema,
   TransactionSchema,

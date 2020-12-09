@@ -1,6 +1,9 @@
 import { Money } from '@jadetree/currency';
 import api from '../api';
 
+/** Account Role */
+export type AccountRole = 'personal' | 'budget' | 'system' | 'trading';
+
 /** Account Type */
 export type AccountType = 'A' | 'L' | 'I' | 'E' | 'C' | 'T';
 

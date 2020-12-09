@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody class="relative pb-32 md:pb-0 text-sm">
-          <template v-for="t in transactions">
+          <template v-for="t in ledger">
             <template v-if="t.splits.length === 1">
               <tr :key="`${t.transaction_id}-${t.line_id}`">
                 <td class="text-left">{{ formatShortDate(t.date) }}</td>
@@ -184,7 +184,7 @@
           <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" class="pencil w-6 h-6 md:w-4 md:h-4"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
         </button>
       </div>
-      <div v-if="currentAccount" class="flex flex-col items-stretch w-full my-2">
+      <div class="flex flex-col items-stretch w-full my-2">
         <div class="hidden sm:flex items-center justify-between w-full">
           <div class="text-gray-800 sm:text-sm font-medium">Cleared Balance</div>
           <div class="text-right font-medium">{{ formatCurrency(clearedBalance) }}</div>
@@ -238,8 +238,8 @@ import {
   AccountSchema,
   BudgetSchema,
   CategorySchema,
+  LedgerEntrySchema,
   PayeeSchema,
-  TransactionSchema,
 } from '@/api/types';
 import { compareKeys } from '@/util/sort';
 
@@ -260,28 +260,28 @@ type AccountListOption = {
     JtSidebarLayout,
   },
   computed: {
-    ...mapState('account', ['accounts', 'currentAccount']),
+    ...mapState('account', ['accounts']),
     ...mapState('budget', ['currentBudget']),
-    ...mapState('transactions', ['transactions']),
+    ...mapState('ledger', ['ledger', 'currentAccount']),
     ...mapGetters(['userCurrency']),
     ...mapGetters('account', ['budgetAccounts', 'findAccount', 'offBudgetAccounts']),
     ...mapGetters('budget', ['findCategory']),
     ...mapGetters('l10n', ['formatCurrency', 'formatMonth', 'formatShortDate']),
-    ...mapGetters('transactions', ['findPayee']),
+    ...mapGetters('payee', ['findPayee']),
   },
 })
-export default class TransactionPage extends Vue {
+export default class LedgerPage extends Vue {
   /* eslint-disable lines-between-class-members */
   private budgetAccounts!: (id: number) => AccountSchema[];
   private currentAccount!: AccountSchema | null;
   private currentBudget!: BudgetSchema | undefined;
+  private ledger!: LedgerEntrySchema[];
   private findAccount!: (id: number) => AccountSchema | undefined;
   private findCategory!: (id: number) => CategorySchema[];
   private findPayee!: (id: number) => PayeeSchema | undefined;
   private formatCurrency!: (money: Money) => string;
   private formatMonth!: (date: Date) => string;
   private offBudgetAccounts!: AccountSchema[];
-  private transactions!: TransactionSchema[];
   private userCurrency!: string | undefined;
   /* eslint-enable lines-between-class-members */
 
@@ -331,9 +331,19 @@ export default class TransactionPage extends Vue {
 
   /** Cleared Transaction Balance */
   get clearedBalance(): Money {
-    const ccy = this.currentAccount ? this.currentAccount.currency : 'XXX';
-    return this.transactions.reduce(
-      (acc, cur) => (cur.cleared && cur.amount ? acc.add(cur.amount) : acc),
+    const { currentAccount, userCurrency } = this;
+    const ccy = currentAccount ? currentAccount.currency : userCurrency;
+    return this.ledger.filter((e) => e.cleared).reduce(
+      (acc, cur) => {
+        const account = this.findAccount(cur.line_account_id || -1);
+        if (!cur.amount || !account) return acc;
+        if (account.type !== 'L') {
+          return acc.add(cur.amount);
+        /* eslint-disable-next-line no-else-return */
+        } else {
+          return acc.subtract(cur.amount);
+        }
+      },
       new Money(0, ccy),
     );
   }
@@ -353,18 +363,38 @@ export default class TransactionPage extends Vue {
 
   /** Uncleared Transaction Balance */
   get unclearedBalance(): Money {
-    const ccy = this.currentAccount ? this.currentAccount.currency : 'XXX';
-    return this.transactions.reduce(
-      (acc, cur) => (!cur.cleared && cur.amount ? acc.add(cur.amount) : acc),
+    const { currentAccount, userCurrency } = this;
+    const ccy = currentAccount ? currentAccount.currency : userCurrency;
+    return this.ledger.filter((e) => !e.cleared).reduce(
+      (acc, cur) => {
+        const account = this.findAccount(cur.line_account_id || -1);
+        if (!cur.amount || !account) return acc;
+        if (account.type !== 'L') {
+          return acc.add(cur.amount);
+        /* eslint-disable-next-line no-else-return */
+        } else {
+          return acc.subtract(cur.amount);
+        }
+      },
       new Money(0, ccy),
     );
   }
 
   /** Working Balance */
   get workingBalance(): Money {
-    const ccy = this.currentAccount ? this.currentAccount.currency : 'XXX';
-    return this.transactions.reduce(
-      (acc, cur) => (cur.amount ? acc.add(cur.amount) : acc),
+    const { currentAccount, userCurrency } = this;
+    const ccy = currentAccount ? currentAccount.currency : userCurrency;
+    return this.ledger.reduce(
+      (acc, cur) => {
+        const account = this.findAccount(cur.line_account_id || -1);
+        if (!cur.amount || !account) return acc;
+        if (account.type !== 'L') {
+          return acc.add(cur.amount);
+        /* eslint-disable-next-line no-else-return */
+        } else {
+          return acc.subtract(cur.amount);
+        }
+      },
       new Money(0, ccy),
     );
   }
@@ -422,12 +452,12 @@ export default class TransactionPage extends Vue {
   }
 
   /** Clear or Un-Clear a Transaction */
-  clearTransaction(txn: TransactionSchema) {
+  clearTransaction(txn: LedgerEntrySchema) {
     const { dispatch } = this.$store;
     /* eslint-disable @typescript-eslint/camelcase */
     const { transaction_id, line_id, cleared } = txn;
     const data = { line_id, cleared: !cleared };
-    dispatch('transactions/clearTransaction', {
+    dispatch('ledger/clearTransaction', {
       id: transaction_id,
       data,
     }).catch((error) => {
@@ -442,7 +472,7 @@ export default class TransactionPage extends Vue {
   }
 
   /** Show the Transaction Editor */
-  editTransaction(txn: TransactionSchema) {
+  editTransaction(txn: LedgerEntrySchema) {
     if (!txn || !txn.transaction_id) return;
     transactionService.getTransaction(txn.transaction_id)
       .then((transaction) => {
@@ -455,7 +485,7 @@ export default class TransactionPage extends Vue {
   }
 
   /** Get Inflow Amount */
-  inflowAmount(transaction: TransactionSchema, amount?: Money): Money {
+  inflowAmount(transaction: LedgerEntrySchema, amount?: Money): Money {
     if (!transaction || !transaction.line_account_id) return new Money(0, this.userCurrency);
     const account = this.findAccount(transaction.line_account_id);
     const sign = account && account.type === 'L' ? -1 : 1;
@@ -478,7 +508,7 @@ export default class TransactionPage extends Vue {
   }
 
   /** Get Outflow Amount */
-  outflowAmount(transaction: TransactionSchema, amount?: Money): Money {
+  outflowAmount(transaction: LedgerEntrySchema, amount?: Money): Money {
     if (!transaction || !transaction.line_account_id) return new Money(0, this.userCurrency);
     const account = this.findAccount(transaction.line_account_id);
     const sign = account && account.type === 'L' ? 1 : -1;
@@ -496,10 +526,10 @@ export default class TransactionPage extends Vue {
   setCurrentAccount(value: string | number) {
     const { dispatch } = this.$store;
     if (value === 'all') {
-      dispatch('account/setCurrentAccount', null);
+      dispatch('ledger/changeAccount', null);
     } else {
       const id = typeof value === 'string' ? Number.parseInt(value, 10) : value;
-      dispatch('account/setCurrentAccount', id);
+      dispatch('ledger/changeAccount', id);
     }
   }
 
