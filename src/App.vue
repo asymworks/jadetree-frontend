@@ -47,6 +47,11 @@ import Navbar from './components/Navbar.vue';
 import LoadingPage from './pages/LoadingPage.vue';
 import JtNotificationGroup from './layouts/JtNotificationGroup.vue';
 
+type SocketEvent = {
+  class: string;
+  items: unknown[];
+}
+
 @Component({
   components: { JtNotificationGroup, LoadingPage, Navbar },
   computed: mapGetters([
@@ -85,18 +90,31 @@ export default class App extends Vue {
   }
 
   @Socket('create')
-  wsCreated(data: unknown) {
-    console.log('ws:create', data);
+  wsCreated(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsDelete${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
   }
 
   @Socket('delete')
-  wsDeleted(data: unknown) {
-    console.log('ws:delete', data);
+  wsDeleted(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsDelete${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
   }
 
   @Socket('update')
-  wsUpdated(data: unknown) {
-    console.log('ws:update', data);
+  wsUpdated(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsUpdate${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
+  }
+
+  @Socket('clear')
+  wsChangedTransaction(data: SocketEvent) {
+    const { dispatch } = this.$store;
+    const actionName = `wsClear${data.class}`;
+    dispatch('dispatchAll', { actionName, actionPayload: data.items });
   }
 }
 </script>

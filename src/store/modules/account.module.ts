@@ -93,6 +93,15 @@ const accountModule: Module<AccountState, RootState> = {
     onLogout({ commit }) {
       commit('clear');
     },
+    wsCreateTransaction({ dispatch }) {
+      return dispatch('loadAccounts');
+    },
+    wsDeleteTransaction({ dispatch }) {
+      return dispatch('loadAccounts');
+    },
+    wsUpdateTransaction({ dispatch }) {
+      return dispatch('loadAccounts');
+    },
   },
   mutations: {
     clear(state: AccountState) {

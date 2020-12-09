@@ -1,6 +1,7 @@
 import { formatISO, parseISO } from 'date-fns';
 import Decimal from 'decimal.js-light';
 import { Money } from '@jadetree/currency';
+import { AccountRole } from './account.service';
 import api from '../api';
 
 /** Transaction Type */
@@ -20,6 +21,7 @@ export type TransactionClearanceSchema = {
 export type TransactionLineSchema = {
   id?: number;
   account_id?: number;
+  role?: AccountRole;
   amount?: string | Decimal | Money;
   currency?: string;
   cleared?: boolean;
@@ -70,7 +72,7 @@ export type ReconcileSchema = {
 }
 
 /** Load Transaction Clearance Schema */
-function loadTransactionClearanceSchema(
+export function loadTransactionClearanceSchema(
   data: TransactionClearanceSchema,
 ): TransactionClearanceSchema {
   const loaded = { ...data };
@@ -88,7 +90,7 @@ function loadTransactionClearanceSchema(
 }
 
 /** Dump Transaction Clearance Schema */
-function dumpTransactionClearanceSchema(
+export function dumpTransactionClearanceSchema(
   data: TransactionClearanceSchema,
 ): TransactionClearanceSchema {
   const dumped = { ...data };
@@ -106,7 +108,7 @@ function dumpTransactionClearanceSchema(
 }
 
 /** Load Transaction Line Schema */
-function loadTransactionLineSchema(
+export function loadTransactionLineSchema(
   data: TransactionLineSchema,
 ): TransactionLineSchema {
   const loaded = { ...data };
@@ -127,7 +129,7 @@ function loadTransactionLineSchema(
 }
 
 /** Dump Transaction Line Schema */
-function dumpTransactionLineSchema(
+export function dumpTransactionLineSchema(
   data: TransactionLineSchema,
 ): TransactionLineSchema {
   const dumped = { ...data };

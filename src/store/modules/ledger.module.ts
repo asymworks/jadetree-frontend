@@ -3,12 +3,14 @@
 import { Module } from 'vuex';
 /* eslint-disable import/named */
 import { ledgerService, transactionService } from '@/api';
+import { loadTransactionLineSchema } from '@/api/schema';
 import {
   ApiError,
   AccountSchema,
   LedgerEntrySchema,
   ReconcileSchema,
   TransactionClearanceSchema,
+  TransactionLineSchema,
   TransactionSchema,
 } from '@/api/types';
 /* eslint-enable import/named */
@@ -55,19 +57,12 @@ const ledgerModule: Module<LedgerState, RootState> = {
       return dispatch('reload');
     },
     clearTransaction(
-      { commit, dispatch },
+      { commit },
       { id, data }: { id: number; data: TransactionClearanceSchema },
     ): Promise<TransactionClearanceSchema[]> {
       commit('loading');
       return transactionService.clearTransaction(id, data)
-        .then((data: TransactionClearanceSchema[]) => {
-          dispatch('reload');
-          return data;
-        })
-        .catch((error: ApiError) => {
-          commit('error', error);
-          throw error;
-        });
+        .catch((error: ApiError) => { throw error; });
     },
     createTransaction(
       { commit, dispatch },
@@ -155,6 +150,29 @@ const ledgerModule: Module<LedgerState, RootState> = {
           throw error;
         });
     },
+    wsClearTransaction({ commit }, data: TransactionSchema[]) {
+      if (data && data.length) {
+        data.forEach((txn) => {
+          if (txn.lines && txn.lines.length) {
+            commit(
+              'updateClearance',
+              txn.lines
+                .filter((ln) => ln.role === 'personal')
+                .map((ln) => loadTransactionLineSchema(ln)),
+            );
+          }
+        });
+      }
+    },
+    wsCreateTransaction({ dispatch }) {
+      return dispatch('reload');
+    },
+    wsDeleteTransaction({ dispatch }) {
+      return dispatch('reload');
+    },
+    wsUpdateTransaction({ dispatch }) {
+      return dispatch('reload');
+    },
   },
   mutations: {
     clear(state: LedgerState) {
@@ -179,6 +197,27 @@ const ledgerModule: Module<LedgerState, RootState> = {
       } else {
         localStorage.setItem('currentAccount', `${account.id}`);
       }
+    },
+    updateClearance(state: LedgerState, lines: TransactionLineSchema[]) {
+      // Update LedgerEntrySchema items in-place for Clearance or Reconciliation
+      // status updates since it doesn't affect any other calculated values
+      lines.forEach((ln) => {
+        /* eslint-disable @typescript-eslint/camelcase */
+        /* eslint-disable-next-line object-curly-newline */
+        const { id, cleared, cleared_at, reconciled, reconciled_at } = ln;
+        const ledgerEntry = state.ledger.find((le) => le.line_id === id);
+        if (ledgerEntry) {
+          if (typeof cleared !== 'undefined') {
+            ledgerEntry.cleared = cleared;
+            ledgerEntry.cleared_at = cleared_at;
+          }
+          if (typeof reconciled !== 'undefined') {
+            ledgerEntry.reconciled = reconciled;
+            ledgerEntry.reconciled_at = reconciled_at;
+          }
+        }
+        /* eslint-enable @typescript-eslint/camelcase */
+      });
     },
   },
 };

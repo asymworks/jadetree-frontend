@@ -51,12 +51,6 @@ const payeesModule: Module<PayeeState, RootState> = {
           throw error;
         });
     },
-    onAccountCreated({ dispatch }) {
-      return dispatch('reload');
-    },
-    onAccountDeleted({ dispatch }) {
-      return dispatch('reload');
-    },
     onLogin({ dispatch }) {
       return dispatch('reload');
     },
@@ -68,6 +62,15 @@ const payeesModule: Module<PayeeState, RootState> = {
           commit('error', error);
           throw error;
         });
+    },
+    wsCreatePayee({ commit }, items: PayeeSchema[]) {
+      items.forEach((payee) => commit('updated', payee));
+    },
+    wsDeletePayee({ commit }, items: PayeeSchema[]) {
+      items.forEach(({ id }) => commit('deleted', id));
+    },
+    wsUpdatePayee({ commit }, items: PayeeSchema[]) {
+      items.forEach((payee) => commit('updated', payee));
     },
   },
   mutations: {

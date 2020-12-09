@@ -15,6 +15,7 @@ export {
   AccountSubtype,
   AccountSubtypeOption,
   AccountType,
+  AccountRole,
 } from './service/account.service';
 
 export {
