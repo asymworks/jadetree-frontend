@@ -58,8 +58,8 @@ import { Money } from '@jadetree/currency';
 import {
   ApiError,
   AccountSchema,
+  LedgerEntrySchema,
   ReconcileSchema,
-  TransactionSchema,
 } from '@/api/types';
 import BaseDialog from './BaseDialog';
 
@@ -71,7 +71,7 @@ interface StatementFormData {
 
 @Component({
   computed: {
-    ...mapState('transactions', ['transactions']),
+    ...mapState('ledger', ['ledger']),
     ...mapGetters(['userCurrency']),
     ...mapGetters('account', ['accountLoading', 'findAccount']),
     ...mapGetters('l10n', ['formatCurrency', 'formatLongDate']),
@@ -81,7 +81,7 @@ export default class StartReconDialog extends BaseDialog {
   /* eslint-disable lines-between-class-members */
   private findAccount!: (id: number) => AccountSchema;
   private formatLongDate!: (date: Date) => string;
-  private transactions!: TransactionSchema[];
+  private ledger!: LedgerEntrySchema[];
   private userCurrency!: string;
   /* eslint-enable lines-between-class-members */
 
@@ -108,7 +108,7 @@ export default class StartReconDialog extends BaseDialog {
   /** Cleared Amount */
   get clearedAmount(): Money {
     const { accountCurrency, statementDate } = this;
-    return this.transactions
+    return this.ledger
       .filter((txn) => txn.cleared && (differenceInDays(txn.date as Date, statementDate) <= 0))
       .reduce(
         (acc, cur) => (cur.cleared && cur.amount ? acc.add(cur.amount) : acc),
@@ -141,7 +141,7 @@ export default class StartReconDialog extends BaseDialog {
     /* eslint-enable @typescript-eslint/camelcase */
 
     const { dispatch } = this.$store;
-    dispatch('transactions/reconcileAccount', { accountId, data })
+    dispatch('ledger/reconcileAccount', { accountId, data })
       .then((txns) => {
         this.close();
         this.$notify({

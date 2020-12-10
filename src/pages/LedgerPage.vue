@@ -281,7 +281,7 @@ export default class LedgerPage extends Vue {
   }
 
   /** Update Item List when Ledger Changes */
-  @Watch('ledger', { immediate: true })
+  @Watch('ledger', { deep: true, immediate: true })
   onLedgerChanged() {
     this.ledgerItems = this.ledger.map((entry) => ({
       uid: `${entry.transaction_id}-${entry.line_id}`,
