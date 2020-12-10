@@ -199,6 +199,7 @@ const ledgerModule: Module<LedgerState, RootState> = {
       }
     },
     updateClearance(state: LedgerState, lines: TransactionLineSchema[]) {
+      state.status = { loaded: true };
       // Update LedgerEntrySchema items in-place for Clearance or Reconciliation
       // status updates since it doesn't affect any other calculated values
       lines.forEach((ln) => {

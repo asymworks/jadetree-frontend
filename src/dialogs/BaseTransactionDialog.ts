@@ -18,8 +18,8 @@ import { TransactionData } from '../components/TransactionEditor.vue';
 })
 export default class BaseTransactionDialog extends BaseDialog {
   /* eslint-disable lines-between-class-members */
-  private findAccount!: (id: number) => AccountSchema;
-  private findPayee!: (id: number) => PayeeSchema;
+  protected findAccount!: (id: number) => AccountSchema;
+  protected findPayee!: (id: number) => PayeeSchema;
   /* eslint-enable lines-between-class-members */
 
   /** Create a new Payee */

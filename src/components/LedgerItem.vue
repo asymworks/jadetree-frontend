@@ -1,6 +1,6 @@
 <!-- eslint-disable max-len -->
 <template>
-  <div class="relative ledger-entry w-full py-1 border-b">
+  <div class="ledger-entry--container relative ledger-entry w-full py-1 border-b" @click="dispatch('LedgerPage', 'click-line', source.uid)">
     <div class="ledger-entry--top flex items-center max-w-full">
       <div class="ledger-entry--date w-20">{{ source.dateFmt }}</div>
       <div v-if="source.entry.splits[0].type === 'transfer'" class="ledger-entry--payee flex-1 min-w-0 flex items-center justify-between truncate">
@@ -41,9 +41,9 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
           </svg>
         </button>
-        <div v-else class="text-green-700" v-tooltip="`Reconciled on ${ formatShortDate(source.entry.reconciled_at) }`">
-          <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+        <div v-else class="text-green-500" v-tooltip="`Reconciled on ${ formatShortDate(source.entry.reconciled_at) }`">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
           </svg>
         </div>
 
@@ -72,7 +72,7 @@
     <template v-else>
       <div class="ledger-entry--categories flex min-w-0 items-start">
         <div class="w-20"></div>
-        <div class="ledger-entry--category flex-1 min-w-0 truncate cursor-pointer" @click="dispatch('LedgerPage', 'toggle-expand', source.uid)">
+        <div class="ledger-entry--category flex-1 min-w-0 truncate cursor-pointer" @click.stop="dispatch('LedgerPage', 'toggle-expand', source.uid)">
           <svg v-if="!source.expanded" class="inline-block -ml-1 -mr-1 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
           </svg>

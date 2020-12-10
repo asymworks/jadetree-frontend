@@ -139,6 +139,7 @@ type LedgerEntryItem = {
     ...mapState('account', ['accounts']),
     ...mapState('budget', ['currentBudget']),
     ...mapState('ledger', ['ledger', 'currentAccount']),
+    ...mapState('payee', ['payees']),
     ...mapGetters(['userCurrency']),
     ...mapGetters('account', ['budgetAccounts', 'findAccount', 'offBudgetAccounts']),
     ...mapGetters('budget', ['findCategory']),
@@ -150,6 +151,7 @@ type LedgerEntryItem = {
 export default class LedgerPage extends Vue {
   /* eslint-disable lines-between-class-members */
   private budgetAccounts!: (id: number) => AccountSchema[];
+  private budgets!: BudgetSchema[];
   private currentAccount!: AccountSchema | null;
   private currentBudget!: BudgetSchema | undefined;
   private ledger!: LedgerEntrySchema[];
@@ -160,6 +162,7 @@ export default class LedgerPage extends Vue {
   private formatMonth!: (date: Date) => string;
   private formatShortDate!: (date: Date) => string;
   private offBudgetAccounts!: AccountSchema[];
+  private payees!: PayeeSchema[];
   private userCurrency!: string | undefined;
   /* eslint-enable lines-between-class-members */
 
@@ -280,36 +283,22 @@ export default class LedgerPage extends Vue {
     );
   }
 
+  /** Update Item List when Category List Changes */
+  @Watch('currentBudget', { deep: true })
+  onBudgetChanged() {
+    this.reloadLedgerItems();
+  }
+
   /** Update Item List when Ledger Changes */
   @Watch('ledger', { deep: true, immediate: true })
   onLedgerChanged() {
-    this.ledgerItems = this.ledger.map((entry) => ({
-      uid: `${entry.transaction_id}-${entry.line_id}`,
-      expanded: false,
-      entry,
-      /* Pre-Calculate Formatted Fields to speed up List Rendering */
-      dateFmt: entry.date instanceof Date
-        ? this.formatShortDate(entry.date)
-        : '',
-      isInflow: entry.amount instanceof Money
-        ? this.inflowAmount(entry, entry.amount).gt(0)
-        : false,
-      isOutflow: entry.amount instanceof Money
-        ? this.outflowAmount(entry, entry.amount).gt(0)
-        : false,
-      inflowFmt: entry.amount instanceof Money
-        ? this.formatCurrency(this.inflowAmount(entry, entry.amount))
-        : '',
-      outflowFmt: entry.amount instanceof Money
-        ? this.formatCurrency(this.outflowAmount(entry, entry.amount))
-        : '',
-      amountFmt: entry.amount instanceof Money
-        ? this.formatCurrency(entry.amount)
-        : '',
-      payeeName: typeof entry.payee_id === 'number'
-        ? this.payeeName(entry.payee_id)
-        : '',
-    }));
+    this.reloadLedgerItems();
+  }
+
+  /** Update Item List when Payee List Changes */
+  @Watch('payees', { deep: true })
+  onPayeesChanged() {
+    this.reloadLedgerItems();
   }
 
   /** Setup Event Handlers for the Virtual List */
@@ -332,6 +321,17 @@ export default class LedgerPage extends Vue {
       const item = this.ledgerItems.find((itm) => itm.uid === uid);
       if (item) {
         this.editTransaction(item.entry);
+      }
+    });
+
+    this.$on('click-line', (uid: string) => {
+      // Edit Line on Click if the window is small enough to hide the Edit
+      // and Clear buttons
+      if (!window.matchMedia('(min-width:768px)').matches) {
+        const item = this.ledgerItems.find((itm) => itm.uid === uid);
+        if (item) {
+          this.editTransaction(item.entry);
+        }
       }
     });
   }
@@ -452,6 +452,37 @@ export default class LedgerPage extends Vue {
     const payee = this.findPayee(payeeId);
     if (!payee || !payee.name) return `<Payee ${payeeId}>`;
     return payee.name;
+  }
+
+  /** Reload Ledger Item List */
+  reloadLedgerItems() {
+    this.ledgerItems = this.ledger.map((entry) => ({
+      uid: `${entry.transaction_id}-${entry.line_id}`,
+      expanded: false,
+      entry,
+      /* Pre-Calculate Formatted Fields to speed up List Rendering */
+      dateFmt: entry.date instanceof Date
+        ? this.formatShortDate(entry.date)
+        : '',
+      isInflow: entry.amount instanceof Money
+        ? this.inflowAmount(entry, entry.amount).gt(0)
+        : false,
+      isOutflow: entry.amount instanceof Money
+        ? this.outflowAmount(entry, entry.amount).gt(0)
+        : false,
+      inflowFmt: entry.amount instanceof Money
+        ? this.formatCurrency(this.inflowAmount(entry, entry.amount))
+        : '',
+      outflowFmt: entry.amount instanceof Money
+        ? this.formatCurrency(this.outflowAmount(entry, entry.amount))
+        : '',
+      amountFmt: entry.amount instanceof Money
+        ? this.formatCurrency(entry.amount)
+        : '',
+      payeeName: typeof entry.payee_id === 'number'
+        ? this.payeeName(entry.payee_id)
+        : '',
+    }));
   }
 
   /** Set Current Account */
