@@ -1,6 +1,6 @@
 {
   "name": "@jadetree/frontend",
-  "version": "0.9.14-alpha",
+  "version": "0.9.15-alpha",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
