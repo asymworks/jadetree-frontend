@@ -91,29 +91,29 @@ export default class App extends Vue {
 
   @Socket('create')
   wsCreated(data: SocketEvent) {
-    const { dispatch } = this.$store;
-    const actionName = `wsDelete${data.class}`;
-    dispatch('dispatchAll', { actionName, actionPayload: data.items });
+    this.dispatchWsEvent('Create', data);
   }
 
   @Socket('delete')
   wsDeleted(data: SocketEvent) {
-    const { dispatch } = this.$store;
-    const actionName = `wsDelete${data.class}`;
-    dispatch('dispatchAll', { actionName, actionPayload: data.items });
+    this.dispatchWsEvent('Delete', data);
   }
 
   @Socket('update')
   wsUpdated(data: SocketEvent) {
-    const { dispatch } = this.$store;
-    const actionName = `wsUpdate${data.class}`;
-    dispatch('dispatchAll', { actionName, actionPayload: data.items });
+    this.dispatchWsEvent('Update', data);
   }
 
   @Socket('clear')
   wsChangedTransaction(data: SocketEvent) {
+    this.dispatchWsEvent('Clear', data);
+  }
+
+  /** Dispatch a WebSockets Event */
+  dispatchWsEvent(name: string, data: SocketEvent) {
     const { dispatch } = this.$store;
-    const actionName = `wsClear${data.class}`;
+    const actionName = `ws${name}${data.class}`;
+    console.log(`Dispatching ${actionName}`);
     dispatch('dispatchAll', { actionName, actionPayload: data.items });
   }
 }
