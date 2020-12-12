@@ -62,6 +62,10 @@ const ledgerModule: Module<LedgerState, RootState> = {
     ): Promise<TransactionClearanceSchema[]> {
       commit('loading');
       return transactionService.clearTransaction(id, data)
+        .then((response) => {
+          commit('done');
+          return response;
+        })
         .catch((error: ApiError) => { throw error; });
     },
     createTransaction(
@@ -177,6 +181,9 @@ const ledgerModule: Module<LedgerState, RootState> = {
   mutations: {
     clear(state: LedgerState) {
       state.ledger = [];
+    },
+    done(state: LedgerState) {
+      state.status = { loaded: true };
     },
     error(state: LedgerState, error: string) {
       // eslint-disable-next-line no-console
