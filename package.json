@@ -33,7 +33,7 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
-    "@fullhuman/postcss-purgecss": "^3.0.0",
+    "@fullhuman/postcss-purgecss": "~3.0.0",
     "@typescript-eslint/eslint-plugin": "^2.33.0",
     "@typescript-eslint/parser": "^2.33.0",
     "@vue/cli-plugin-babel": "~4.5.0",
