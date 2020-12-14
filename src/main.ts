@@ -6,7 +6,7 @@ import VTooltip from 'v-tooltip';
 import VueFormulate from '@braid/vue-formulate';
 import VueSocketIOExt from 'vue-socket.io-extended';
 import { JtControls, JtFormulateLibrary } from '@jadetree/controls';
-import io from 'socket.io-client';
+import { Manager } from 'socket.io-client';
 
 // Load API
 import api from './api';
@@ -24,6 +24,8 @@ import App from './App.vue';
 // Configuration Schema
 type JadeTreeConfig = {
   apiurl: string;
+  ws_url?: string;
+  ws_namespace?: string;
 };
 
 // Configuration Loader
@@ -87,9 +89,14 @@ async function startup() {
   }
 
   api.baseUrl = config.apiurl;
-  api.socket = io(config.apiurl, { autoConnect: false });
 
-  // Setup SocketIO
+  // Setup WebSockets
+  const wsUrl = config.ws_url || config.apiurl;
+  const wsNamespace = config.ws_namespace || '/';
+  const manager = new Manager(wsUrl, { autoConnect: false });
+
+  api.socket = manager.socket(wsNamespace);
+
   Vue.use(VueSocketIOExt, api.socket);
 
   // Initialize Vuex Modules

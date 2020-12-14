@@ -1,3 +1,5 @@
 {
-  "apiurl": "http://localhost:5000/api/v1"
+  "apiurl": "http://localhost:5000/api/v1",
+  "ws_url": "http://localhost:5000/socket.io",
+  "ws_namespace": "/"
 }

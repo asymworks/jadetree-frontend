@@ -1,3 +1,5 @@
 {
-  "apiurl": "/api"
+  "apiurl": "/api",
+  "ws_url": "/socket.io",
+  "ws_namespace": "/"
 }
