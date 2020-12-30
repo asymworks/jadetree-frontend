@@ -96,6 +96,7 @@ const payeesModule: Module<PayeeState, RootState> = {
       state.status = { loading: true };
     },
     updated(state: PayeeState, payee: PayeeSchema) {
+      state.status = { loaded: true };
       if (typeof payee.id !== 'number') {
         // eslint-disable-next-line no-console
         console.warn('payeeModule.updated called with no payee.id set');
