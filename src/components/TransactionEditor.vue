@@ -115,6 +115,7 @@
         :validation-messages="{
             hasAmount: 'Transaction Amount is required',
           }"
+        error-behavior="submit"
         label="Inflow"
         labelPosition="float"
         name="inflow"
@@ -132,6 +133,7 @@
         :validation-messages="{
             hasAmount: 'Transaction Amount is required',
           }"
+        error-behavior="submit"
         label="Outflow"
         labelPosition="float"
         name="outflow"
