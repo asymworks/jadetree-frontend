@@ -9,3 +9,13 @@
 .formulate-input-element--jtSelect.formulate-input-element::before {
   @apply .border-none;
 }
+
+.formulate-input[data-classification='textArea']
+.formulate-input-element--textarea {
+  @apply .max-w-full;
+}
+
+.formulate-input[data-classification='textArea']
+textarea {
+  @apply .w-full .h-32 .border .rounded-sm .text-sm;
+}

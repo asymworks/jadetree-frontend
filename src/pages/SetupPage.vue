@@ -8,7 +8,7 @@
         create the user and you will be redirected to the user setup page.
       </p>
 
-      <formulate-form>
+      <formulate-form @submit="doSetup">
         <div class="mb-4">
           <formulate-input
             :clearButton="!defaults.mode"
@@ -84,9 +84,8 @@
         <div class="mt-2 flex items-center justify-end">
           <jt-button
             color="blue"
-            type="button"
+            type="submit"
             :loading="setupLoading"
-            @click="doSetup"
           >Complete Setup</jt-button>
         </div>
       </formulate-form>
@@ -96,6 +95,7 @@
 
 <script lang="ts">
 import { Component, Vue, Watch } from 'vue-property-decorator';
+import { ApiError } from '@/api/error';
 import { ServerMode, SetupSchema } from '@/api/types';
 import JtNarrowLayout from '../layouts/JtNarrowLayout.vue';
 
@@ -194,6 +194,14 @@ export default class SetupPage extends Vue {
           if (err.type && err.type !== 2) {
             throw err;
           }
+        });
+      })
+      .catch((error: ApiError) => {
+        this.$notify({
+          group: 'top',
+          title: 'Error',
+          text: error.message,
+          type: 'error',
         });
       });
   }

@@ -41,7 +41,7 @@
               <div class="sm:absolute sm:hidden sm:group-hover:block sm:right-0 sm:py-3 sm:px-2 sm:w-40 sm:bg-gray-800 sm:rounded-b-md z-200">
                 <router-link to="/profile" class="navbar-button navbar-button__menu">Profile</router-link>
                 <router-link to="/settings" class="navbar-button navbar-button__menu">Settings</router-link>
-                <router-link v-if="serverMode !== 'personal'" to="/logout" class="navbar-button navbar-button__menu">Log Out</router-link>
+                <a href="#" v-if="serverMode !== 'personal'" class="navbar-button navbar-button__menu" @click="logoutClick">Log Out</a>
               </div>
             </div>
           </div>
@@ -110,6 +110,14 @@ export default class Navbar extends Vue {
   /** Close Burger Menu */
   closeMenu() {
     this.open = false;
+  }
+
+  /** Log Out of Jade Tree */
+  logoutClick() {
+    const { dispatch } = this.$store;
+    dispatch('auth/logout').then(() => {
+      this.$router.push('/login');
+    });
   }
 }
 </script>

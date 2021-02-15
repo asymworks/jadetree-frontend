@@ -18,12 +18,54 @@ const router = new Router({
       },
     },
 
-    // Login and Logout Pages
+    // Login and Registration Pages
     {
       path: '/login',
       component: () => import('./pages/LoginPage.vue'),
       meta: {
         title: 'Login',
+      },
+    },
+    {
+      path: '/logout',
+      component: () => import('./pages/LogoutPage.vue'),
+      meta: {
+        title: 'Logout',
+      },
+    },
+    {
+      path: '/register',
+      component: () => import('./pages/RegisterPage.vue'),
+      meta: {
+        title: 'Register',
+      },
+    },
+    {
+      path: '/register/cancel',
+      component: () => import('./pages/RegisterCancelPage.vue'),
+      meta: {
+        title: 'Cancel Registration',
+      },
+    },
+    {
+      path: '/register/confirm',
+      component: () => import('./pages/RegisterConfirmPage.vue'),
+      meta: {
+        title: 'Confirm Registration',
+      },
+    },
+    {
+      path: '/register/resend',
+      component: () => import('./pages/RegisterResendPage.vue'),
+      meta: {
+        title: 'Resend Confirmation',
+      },
+    },
+    {
+      path: '/register/success',
+      component: () => import('./pages/RegisterSuccessPage.vue'),
+      meta: {
+        title: 'Registration Success',
       },
     },
 

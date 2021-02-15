@@ -16,11 +16,17 @@ export type AuthResponseSchema = {
   user: UserSchema;
 }
 
+export type AuthRegisterSchema = {
+  email: string;
+  name: string;
+  password: string;
+}
+
 /**
  * Return the list of Authorized Users (will throw error if the server is not
  * in 'personal' or 'family' mode)
  */
-function authUsers(): Promise<AuthUserSchema[]> {
+function getUserList(): Promise<AuthUserSchema[]> {
   return api.get<AuthUserSchema[]>('/auth/login');
 }
 
@@ -30,7 +36,31 @@ function login(email: string, password: string): Promise<AuthResponseSchema> {
   return api.post<AuthResponseSchema>('/auth/login', payload);
 }
 
+/** Register a new User */
+function register(payload: AuthRegisterSchema): Promise<UserSchema> {
+  return api.post<UserSchema>('/auth/register', payload);
+}
+
+/** Confirm the User Registration */
+function cancel(token: string): Promise<void> {
+  return api.get<void>(`/auth/cancel?token=${encodeURI(token)}`);
+}
+
+/** Confirm the User Registration */
+function confirm(token: string): Promise<void> {
+  return api.get<void>(`/auth/confirm?token=${encodeURI(token)}`);
+}
+
+/** Resend a Confirmation Email */
+function resend(email: string): Promise<UserSchema> {
+  return api.get<UserSchema>(`/auth/resendConfirmation?email=${encodeURI(email)}`);
+}
+
 export default {
-  authUsers,
+  cancel,
+  confirm,
+  getUserList,
   login,
+  register,
+  resend,
 };

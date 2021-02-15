@@ -19,6 +19,7 @@ export {
 } from './service/account.service';
 
 export {
+  AuthRegisterSchema,
   AuthRequestSchema,
   AuthResponseSchema,
   AuthUserSchema,
