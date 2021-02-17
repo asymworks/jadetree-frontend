@@ -112,7 +112,7 @@ export default class RegisterPage extends Vue {
     const { token } = this;
 
     // Cancel the User
-    authService.cancel(token)
+    authService.cancel(token.trim())
       .then(() => {
         this.$notify({
           group: 'top',

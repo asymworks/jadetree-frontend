@@ -11,7 +11,12 @@
       <h2 class="font-medium text-2xl text-center w-full mb-3">Register for Jade Tree</h2>
       <p class="mb-4 text-justify">
         Please enter your confirmation token below and click Confirm to confirm your
-        registered email address and start using Jade Tree.
+        registered email address and start using Jade Tree. If your token has expired,
+        you may
+        <router-link
+          class="text-blue-600"
+          to="/register/resend"
+        >request a new token</router-link>.
       </p>
 
       <formulate-form :errors="formErrors" @submit="doConfirm">
@@ -112,7 +117,7 @@ export default class RegisterPage extends Vue {
     const { token } = this;
 
     // Confirm the User
-    authService.confirm(token)
+    authService.confirm(token.trim())
       .then(() => {
         this.$notify({
           group: 'top',

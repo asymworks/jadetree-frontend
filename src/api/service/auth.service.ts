@@ -53,7 +53,7 @@ function confirm(token: string): Promise<void> {
 
 /** Resend a Confirmation Email */
 function resend(email: string): Promise<UserSchema> {
-  return api.get<UserSchema>(`/auth/resendConfirmation?email=${encodeURI(email)}`);
+  return api.get<UserSchema>(`/auth/resendConfirmation?email=${encodeURIComponent(email)}`);
 }
 
 export default {
