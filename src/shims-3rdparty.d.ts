@@ -19,6 +19,12 @@ declare module 'vue-clickaway' {
   export { directive };
 }
 
+declare module 'vue-plotly' {
+
+  const Plotly: PluginObject<void>;
+  export { Plotly };
+}
+
 declare module 'vue-virtual-scroll-list' {
 }
 

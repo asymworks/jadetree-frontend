@@ -116,6 +116,15 @@ const router = new Router({
         requiresProfile: true,
       },
     },
+    {
+      path: '/reports',
+      component: () => import('./pages/ReportPage.vue'),
+      meta: {
+        title: 'Reports',
+        requiresLogin: true,
+        requiresProfile: true,
+      },
+    },
 
     // Redirect to home by default
     { path: '*', redirect: '/home' },

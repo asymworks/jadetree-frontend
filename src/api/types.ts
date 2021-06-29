@@ -44,6 +44,10 @@ export {
 } from './service/payee.service';
 
 export {
+  NetWorthReportSchema,
+} from './service/reports.service';
+
+export {
   SetupSchema,
 } from './service/setup.service';
 
