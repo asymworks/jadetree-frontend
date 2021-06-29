@@ -891,7 +891,7 @@
     postcss "7.0.32"
     purgecss "^2.3.0"
 
-"@fullhuman/postcss-purgecss@^3.0.0":
+"@fullhuman/postcss-purgecss@~3.0.0":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-3.0.0.tgz#e39bf7a7d2a2c664ed151b639785b2efcbca33ff"
   integrity sha512-cvuOgMwIVlfgWcUMqg5p33NbGUxLwMrKtDKkm3QRfOo4PRVNR6+y/xd9OyXTVZiB1bIpKNJ0ZObYPWD3DRQDtw==
@@ -940,15 +940,15 @@
     cssnano-preset-default "^4.0.0"
     postcss "^7.0.0"
 
-"@jadetree/controls@^0.9.4":
-  version "0.9.4"
-  resolved "https://registry.yarnpkg.com/@jadetree/controls/-/controls-0.9.4.tgz#8847671739ad09c21d818c4a2967f54eb2df3ba1"
-  integrity sha512-Aht3p7kzp9WydRaFqruanty6YKwpBf5yAdxlXd9LqAIMC931lunwbQJP6ZcjekViQhEJ916TDymSBjjKYvgP7A==
+"@jadetree/controls@^0.9.6":
+  version "0.9.6"
+  resolved "https://registry.yarnpkg.com/@jadetree/controls/-/controls-0.9.6.tgz#894976b89f485397421d0fbf3835bc399eed7e39"
+  integrity sha512-XevH1ul3jyS1sQrW/wmnSMc3tSWth2zvAhmKGpnpT4cCQgIXvvc2M9uIovaGktB+0VH8YJ35jOJnidcwve1oDA==
 
-"@jadetree/currency@^0.8.16":
-  version "0.8.16"
-  resolved "https://registry.yarnpkg.com/@jadetree/currency/-/currency-0.8.16.tgz#be1480cd82aeffe2b01ad5ad278634b4a1c084af"
-  integrity sha512-+zhnbBxbna0IlxGT3lOboPwJbk8fiEHod7hROJ8AoQH42usjSjmWatqSMGR2vK2qufmj2qtmtuATY1IepCQCsA==
+"@jadetree/currency@^0.8.18":
+  version "0.8.18"
+  resolved "https://registry.yarnpkg.com/@jadetree/currency/-/currency-0.8.18.tgz#e34a490e0d132560049befa9aa8a2f4e8649ec34"
+  integrity sha512-nhv0DPkMO5j+z8BMSNYf9KmyQjIiW1rwZP6QPO5Zctwf/06hANq+A1uRg30Hy04+R5HVwXvGlLblSEapJZlsag==
   dependencies:
     decimal.js-light "^2.5.1"
 

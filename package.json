@@ -9,8 +9,8 @@
   },
   "dependencies": {
     "@braid/vue-formulate": "^2.4.5",
-    "@jadetree/controls": "^0.9.4",
-    "@jadetree/currency": "^0.8.16",
+    "@jadetree/controls": "^0.9.6",
+    "@jadetree/currency": "^0.8.18",
     "cldr-localenames-modern": "^37.0.0",
     "core-js": "^3.6.5",
     "date-fns": "^2.16.1",
