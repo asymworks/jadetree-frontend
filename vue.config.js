@@ -45,13 +45,5 @@ module.exports = {
         });
       }
     }
-
-    // Setup ify-loader for Plot.ly
-    config.module
-      .rule('js-plotly')
-      .test(/\.js$/)
-      .use('ify-loader')
-      .loader('ify-loader')
-      .end();
   },
 };

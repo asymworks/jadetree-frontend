@@ -45,6 +45,7 @@ export {
 
 export {
   NetWorthReportSchema,
+  SpendingReportSchema,
 } from './service/reports.service';
 
 export {

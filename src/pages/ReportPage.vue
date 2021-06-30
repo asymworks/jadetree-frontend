@@ -3,102 +3,80 @@
   <jt-sidebar-layout>
     <template v-slot:default>
       <div class="flex flex-col items-stretch justify-start h-full">
-        <Plotly
-          :data="plotlyConfig.data"
-          :layout="plotlyConfig.layout"
-          :display-mode-bar="false"
-        />
+        <div class="hidden md:block sticky top-0 w-full h-2 bg-gray-100 z-10"><!-- mask space above totals header --></div>
+        <div class="flex flex-col items-start p-2 bg-white border-t border-gray-800 md:border-gray-400 md:border md:rounded">
+          <net-worth-report v-if="reportType === 'networth'" :stacked="true" />
+          <category-spending-report v-if="reportType === 'categories'" :budget_id="currentBudget ? currentBudget.id : null" />
+          <payee-spending-report v-if="reportType === 'payees'" :budget_id="currentBudget ? currentBudget.id : null" />
+        </div>
       </div>
     </template>
     <template v-slot:sidebar>
-      <div class="flex flex-row items-center justify-end w-full">
-        Report Type
+      <div class="flex flex-col items-start justify-start w-full">
+        <div class="font-bold">Report Type</div>
+        <jt-select
+          id="accountSelect"
+          :class="['w-full']"
+          :clearButton="false"
+          :options="reportTypes"
+          v-model="reportType"
+        />
       </div>
     </template>
   </jt-sidebar-layout>
 </template>
 
 <script lang="ts">
-import { mapGetters } from 'vuex';
-import { Plotly } from 'vue-plotly';
 import { Component, Vue } from 'vue-property-decorator';
-import { reportsService } from '@/api';
-import { Money } from '@jadetree/currency';
-import { format } from 'date-fns';
+import { mapGetters, mapState } from 'vuex';
+import { BudgetSchema } from '@/api/types';
+import NetWorthReport from '../reports/NetWorthReport.vue';
+import CategorySpendingReport from '../reports/CategorySpendingReport.vue';
+import PayeeSpendingReport from '../reports/PayeeSpendingReport.vue';
 import JtSidebarLayout from '../layouts/JtSidebarLayout.vue';
 
-/** Bar Plot Data */
-type BarData = {
-  x: string[] | number[];
-  y: number[];
-  text: string[];
-  hoverinfo?: string;
-  name?: string;
-  type: string;
-}
-
-/** Plot Data */
-type PlotData = BarData;
-
-/** Plotly Configuration */
-interface PlotlyConfig {
-  data: PlotData[];
-  layout: {
-    barmode?: string;
-    title?: string;
-  };
+type ReportListOption = {
+  value: string;
+  label: string;
 }
 
 @Component({
   components: {
     JtSidebarLayout,
-    Plotly,
+    CategorySpendingReport,
+    NetWorthReport,
+    PayeeSpendingReport,
   },
   computed: {
-    ...mapGetters('l10n', ['formatCurrency']),
+    ...mapState('budget', ['currentBudget']),
+    ...mapGetters(['userCurrency']),
   },
 })
-export default class BudgetPage extends Vue {
+export default class ReportPage extends Vue {
   /* eslint-disable lines-between-class-members */
-  private formatCurrency!: (money: Money) => string;
+  private currentBudget!: BudgetSchema | undefined;
+  private userCurrency!: string | undefined;
   /* eslint-enable lines-between-class-members */
 
-  /** Plotly Data */
-  plotlyConfig: PlotlyConfig = {
-    data: [],
-    layout: {
-      barmode: 'relative',
-      title: 'Net Worth',
-    },
-  };
+  /** Current Report Type */
+  private reportType: string | null = 'networth';
 
-  mounted() {
-    this.loadNetWorth();
-  }
-
-  /** Load Net Worth Report */
-  loadNetWorth() {
-    reportsService.netWorth().then((report) => {
-      /* eslint-disable object-curly-newline */
-      const traceA: BarData = { x: [], y: [], text: [], name: 'Assets', type: 'bar', hoverinfo: 'text' };
-      const traceL: BarData = { x: [], y: [], text: [], name: 'Liabilities', type: 'bar', hoverinfo: 'text' };
-      const traceN: BarData = { x: [], y: [], text: [], name: 'Net Worth', type: 'scatter', hoverinfo: 'text' };
-      /* eslint-enable object-curly-newline */
-
-      traceA.x = report.map((p) => format(new Date(p.month), 'yyyy-MM-dd'));
-      traceA.y = report.map((p) => new Money(p.assets).amount.toNumber());
-      traceA.text = report.map((p) => `Assets: ${this.formatCurrency(new Money(p.assets))}`);
-      traceL.x = traceA.x;
-      traceL.y = report.map((p) => new Money(p.liabilities).amount.neg().toNumber());
-      traceL.text = report.map((p) => `Liabilities: ${this.formatCurrency(new Money(p.liabilities).negate())}`);
-      traceN.x = traceA.x;
-      traceN.y = report.map((p) => new Money(p.assets).subtract(new Money(p.liabilities))
-        .amount.toNumber());
-      traceN.text = report.map((p) => `Net Worth: ${this.formatCurrency(new Money(p.assets)
-        .subtract(new Money(p.liabilities)))}`);
-
-      this.plotlyConfig.data = [traceA, traceL, traceN];
-    });
+  /** List of Report Types */
+  get reportTypes(): ReportListOption[] {
+    return [
+      {
+        value: 'networth',
+        label: 'Net Worth',
+      },
+      {
+        value: 'categories',
+        label: 'Spending by Category',
+      },
+      {
+        value: 'payees',
+        label: 'Spending by Payee',
+      },
+    ];
   }
 }
 </script>

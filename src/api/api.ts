@@ -25,7 +25,7 @@ export class Api {
    * @param endpoint Endpoint URL, absolute or relative to `baseUrl`
    * @param options HTTP Request Options
    */
-  call<T>(endpoint: string, options: RequestInit): Promise<T> {
+  async call<T>(endpoint: string, options: RequestInit): Promise<T> {
     let fetchUrl = endpoint;
     if (fetchUrl.charAt(0) === '/' && this.baseUrl) {
       fetchUrl = `${this.baseUrl}${fetchUrl}`;
