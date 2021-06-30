@@ -26,3 +26,24 @@ declare module 'md5' {
   function md5(data: string): string;
   export default md5;
 }
+
+declare module 'palette.js' {
+  function palette(
+    scheme: string,
+    number: number,
+    optIndex?: number,
+    varargs?: unknown[],
+  ): string[];
+  export { palette };
+}
+
+declare module 'qinu' {
+  declare type qinuOptions = {
+    length?: number;
+    template?: string;
+    dict?: string;
+    random?: boolean;
+  }
+  function qinu(options: qinuOptions, args?: string | string[]): string;
+  export default qinu;
+}
