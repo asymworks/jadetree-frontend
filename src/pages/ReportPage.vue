@@ -15,7 +15,7 @@
       <div class="flex flex-col items-start justify-start w-full">
         <div class="font-bold">Report Type</div>
         <jt-select
-          id="accountSelect"
+          id="reportSelect"
           :class="['w-full']"
           :clearButton="false"
           :options="reportTypes"
@@ -80,3 +80,9 @@ export default class ReportPage extends Vue {
   }
 }
 </script>
+
+<style>
+#reportSelect {
+  @apply .font-medium;
+}
+</style>
