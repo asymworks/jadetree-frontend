@@ -27,6 +27,15 @@ export type SpendingReportSchema = {
   currency: string;
 }
 
+/** Income Allocation Report Schema */
+export type IncomeAllocationReportSchema = {
+  income: string | Money;
+  spent: string | Money;
+  unspent: string | Money;
+  currency: string;
+  categories: SpendingReportSchema[];
+}
+
 /** Load Net Worth Report Schema */
 function loadNetWorthSchema(data: NetWorthReportSchema): NetWorthReportSchema {
   const loaded = { ...data };
@@ -53,6 +62,27 @@ function loadSpendingSchema(data: SpendingReportSchema): SpendingReportSchema {
   if (typeof data.amount === 'string') {
     loaded.amount = new Money(data.amount, data.currency);
   }
+
+  return loaded;
+}
+
+/** Load Income Allocation Report Schema */
+function loadIncomeAllocationSchema(
+  data: IncomeAllocationReportSchema,
+): IncomeAllocationReportSchema {
+  const loaded = { ...data };
+
+  if (typeof data.income === 'string') {
+    loaded.income = new Money(data.income, data.currency);
+  }
+  if (typeof data.spent === 'string') {
+    loaded.spent = new Money(data.spent, data.currency);
+  }
+  if (typeof data.unspent === 'string') {
+    loaded.unspent = new Money(data.unspent, data.currency);
+  }
+
+  loaded.categories = data.categories.map((e) => loadSpendingSchema(e));
 
   return loaded;
 }
@@ -156,7 +186,35 @@ async function spendingByPayee(
     .then((data) => data.map((p) => loadSpendingSchema(p)));
 }
 
+/** Get Income Allocation Report */
+function incomeAllocation(
+  budget_id: number,
+  filters?: ReportFilterSchema,
+): Promise<IncomeAllocationReportSchema> {
+  let endpoint = `/report/${budget_id}/incomeAlloc`;
+
+  const query: string[] = [];
+  const params = new URLSearchParams();
+
+  if (filters && filters.start_date !== undefined) {
+    params.append('start_date', format(filters.start_date, 'yyyy-MM'));
+  }
+  if (filters && filters.end_date !== undefined) {
+    params.append('end_date', format(filters.end_date, 'yyyy-MM'));
+  }
+
+  // Build the full query string
+  params.forEach((value, key) => query.push(`${key}=${value}`));
+  if (query.length) {
+    endpoint = `${endpoint}?${query.join('&')}`;
+  }
+
+  return api.get<IncomeAllocationReportSchema>(endpoint)
+    .then((data) => loadIncomeAllocationSchema(data));
+}
+
 export default {
+  incomeAllocation,
   netWorth,
   spendingByCategory,
   spendingByPayee,

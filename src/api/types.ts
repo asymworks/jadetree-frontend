@@ -44,6 +44,7 @@ export {
 } from './service/payee.service';
 
 export {
+  IncomeAllocationReportSchema,
   NetWorthReportSchema,
   SpendingReportSchema,
 } from './service/reports.service';

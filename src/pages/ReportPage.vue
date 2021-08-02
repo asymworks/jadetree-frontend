@@ -8,6 +8,7 @@
           <net-worth-report v-if="reportType === 'networth'" :stacked="true" />
           <category-spending-report v-if="reportType === 'categories'" :budget_id="currentBudget ? currentBudget.id : null" />
           <payee-spending-report v-if="reportType === 'payees'" :budget_id="currentBudget ? currentBudget.id : null" />
+          <income-allocation-report v-if="reportType === 'income'" :budget_id="currentBudget ? currentBudget.id : null" />
         </div>
       </div>
     </template>
@@ -30,6 +31,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mapGetters, mapState } from 'vuex';
 import { BudgetSchema } from '@/api/types';
+import IncomeAllocationReport from '../reports/IncomeAllocationReport.vue';
 import NetWorthReport from '../reports/NetWorthReport.vue';
 import CategorySpendingReport from '../reports/CategorySpendingReport.vue';
 import PayeeSpendingReport from '../reports/PayeeSpendingReport.vue';
@@ -44,6 +46,7 @@ type ReportListOption = {
   components: {
     JtSidebarLayout,
     CategorySpendingReport,
+    IncomeAllocationReport,
     NetWorthReport,
     PayeeSpendingReport,
   },
@@ -75,6 +78,10 @@ export default class ReportPage extends Vue {
       {
         value: 'payees',
         label: 'Spending by Payee',
+      },
+      {
+        value: 'income',
+        label: 'Income Breakdown',
       },
     ];
   }

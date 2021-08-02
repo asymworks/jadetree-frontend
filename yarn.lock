@@ -2777,6 +2777,11 @@ chart.js@^3.4.0:
   resolved "https://registry.yarnpkg.com/chart.js/-/chart.js-3.4.0.tgz#4fb2a750225fcc1b387221422f5d4260b55b4579"
   integrity sha512-mJsRm2apQm5mwz2OgYqGNG4erZh/qljcRZkWSa0kLkFr3UC3e1wKRMgnIh6WdhUrNu0w/JT9PkjLyylqEqHXEQ==
 
+chartjs-chart-sankey@^0.7.1:
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/chartjs-chart-sankey/-/chartjs-chart-sankey-0.7.1.tgz#355f2138b61e9088a1bb9a4d5877c82054070389"
+  integrity sha512-TOOyqSN6RbymmJCnBp77Z9hEKml9WadLgmsNKUlJGWMVIL6CmQPtsb04fa9+mDzkt+F/cBIi+XEHh5IlZVRt/w==
+
 check-types@^8.0.3:
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/check-types/-/check-types-8.0.3.tgz#3356cca19c889544f2d7a95ed49ce508a0ecf552"
