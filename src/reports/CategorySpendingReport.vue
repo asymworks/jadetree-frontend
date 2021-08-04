@@ -49,9 +49,11 @@ import {
   ChartData,
   ChartEvent,
   ChartOptions,
+  ChartType,
   DoughnutController,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Doughnut } from 'vue-chart-3';
 import { tolVibrant } from '../util/colorscheme';
@@ -139,7 +141,7 @@ export default class CategorySpendingReport extends Vue {
       plugins: {
         tooltip: {
           callbacks: {
-            label: (context): string => {
+            label: (context: TooltipItem<ChartType>): string => {
               const label = `${context.label}: ` || '';
               return label + this.formatCurrency(
                 new Money(context.parsed, this.userCurrency),
@@ -150,7 +152,7 @@ export default class CategorySpendingReport extends Vue {
       },
       aspectRatio: this.aspectRatio,
       maintainAspectRatio: true,
-      onClick: (evt, elements, chart) => this.chartClicked(evt, elements, chart),
+      onClick: (evt: ChartEvent, elements: ActiveElement[]) => this.chartClicked(evt, elements),
       responsive: true,
     };
   }
@@ -170,7 +172,7 @@ export default class CategorySpendingReport extends Vue {
   }
 
   /** Chart Click Handler */
-  chartClicked(evt: ChartEvent, elements: ActiveElement[], chart: Chart): void {
+  chartClicked(evt: ChartEvent, elements: ActiveElement[]): void {
     if (this.parentCategory === null) {
       const groupIndex = elements.find((e) => (e.index !== undefined));
       if (groupIndex !== undefined) {

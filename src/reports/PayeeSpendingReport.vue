@@ -34,9 +34,11 @@ import {
   Chart,
   ChartData,
   ChartOptions,
+  ChartType,
   DoughnutController,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Doughnut } from 'vue-chart-3';
 import { tolVibrant } from '../util/colorscheme';
@@ -114,7 +116,7 @@ export default class PayeeSpendingReport extends Vue {
       plugins: {
         tooltip: {
           callbacks: {
-            label: (context): string => {
+            label: (context: TooltipItem<ChartType>): string => {
               const label = `${context.label}: ` || '';
               return label + this.formatCurrency(
                 new Money(context.parsed, this.userCurrency),

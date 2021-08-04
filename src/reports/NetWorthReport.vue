@@ -30,12 +30,14 @@ import {
   ChartData,
   ChartDataset,
   ChartOptions,
+  ChartType,
   LineController,
   LineElement,
   LinearScale,
   PointElement,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { format } from 'date-fns';
 import { Bar } from 'vue-chart-3';
@@ -118,7 +120,7 @@ export default class NetWorthReport extends Vue {
       plugins: {
         tooltip: {
           callbacks: {
-            label: (context): string => {
+            label: (context: TooltipItem<ChartType>): string => {
               const label = `${context.dataset.label}: ` || '';
               return label + this.formatCurrency(
                 new Money(context.parsed.y, this.userCurrency),

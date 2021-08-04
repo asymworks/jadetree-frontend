@@ -36,8 +36,12 @@ import {
   Chart,
   ChartData,
   ChartOptions,
+  ChartType,
+  SankeyControllerDatasetOptions,
+  SankeyDataPoint,
   Title,
   Tooltip,
+  TooltipItem,
 } from 'chart.js';
 import { Flow, SankeyController } from 'chartjs-chart-sankey';
 import { defineChartComponent } from 'vue-chart-3';
@@ -123,11 +127,11 @@ export default class IncomeBreakdownReport extends Vue {
       plugins: {
         tooltip: {
           callbacks: {
-            label: (context): string => {
-              const item = context.dataset.data[context.dataIndex];
-              const { labels } = context.dataset;
+            label: (context: TooltipItem<ChartType>): string => {
+              const item = context.dataset.data[context.dataIndex] as SankeyDataPoint;
+              const { labels } = (context.dataset as SankeyControllerDatasetOptions);
               if (item) {
-                const label = `${labels[item.from] || item.from} -> ${labels[item.to] || item.to}: `;
+                const label = `${(labels && labels[item.from]) || item.from} -> ${(labels && labels[item.to]) || item.to}: `;
                 return label + this.formatCurrency(
                   new Money(item.flow, this.userCurrency),
                 );
