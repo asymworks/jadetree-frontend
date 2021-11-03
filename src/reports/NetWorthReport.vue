@@ -19,7 +19,6 @@
 <script lang="ts">
 import { mapGetters } from 'vuex';
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { reportsService } from '@/api';
 import { JtSpinner } from '@jadetree/controls';
 import { Money } from '@jadetree/currency';
 import {
@@ -41,6 +40,7 @@ import {
 } from 'chart.js';
 import { format } from 'date-fns';
 import { Bar } from 'vue-chart-3';
+import { reportsService } from '@/api';
 
 Chart.register(
   BarController,

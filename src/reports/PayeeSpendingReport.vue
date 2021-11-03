@@ -25,8 +25,6 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
-import { reportsService } from '@/api';
-import { PayeeSchema, SpendingReportSchema } from '@/api/types';
 import { JtSpinner } from '@jadetree/controls';
 import { Money } from '@jadetree/currency';
 import {
@@ -42,6 +40,8 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'vue-chart-3';
 import { tolVibrant } from '../util/colorscheme';
+import { reportsService } from '@/api';
+import { PayeeSchema, SpendingReportSchema } from '@/api/types';
 
 Chart.register(
   ArcElement,

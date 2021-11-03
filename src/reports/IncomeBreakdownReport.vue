@@ -28,8 +28,6 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
-import { budgetService, reportsService } from '@/api';
-import { BudgetSchema, CategorySchema, IncomeAllocationReportSchema } from '@/api/types';
 import { JtButton, JtSpinner } from '@jadetree/controls';
 import { Money } from '@jadetree/currency';
 import {
@@ -45,6 +43,8 @@ import {
 } from 'chart.js';
 import { Flow, SankeyController } from 'chartjs-chart-sankey';
 import { defineChartComponent } from 'vue-chart-3';
+import { budgetService, reportsService } from '@/api';
+import { BudgetSchema, CategorySchema, IncomeAllocationReportSchema } from '@/api/types';
 import { tolVibrant } from '../util/colorscheme';
 
 type FlowRecord = {

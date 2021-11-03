@@ -38,8 +38,6 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
-import { budgetService, reportsService } from '@/api';
-import { CategorySchema, SpendingReportSchema } from '@/api/types';
 import { JtButton, JtSpinner } from '@jadetree/controls';
 import { Money } from '@jadetree/currency';
 import {
@@ -56,6 +54,8 @@ import {
   TooltipItem,
 } from 'chart.js';
 import { Doughnut } from 'vue-chart-3';
+import { budgetService, reportsService } from '@/api';
+import { CategorySchema, SpendingReportSchema } from '@/api/types';
 import { tolVibrant } from '../util/colorscheme';
 
 Chart.register(
