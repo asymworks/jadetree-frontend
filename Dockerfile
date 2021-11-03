@@ -1,5 +1,5 @@
 # build stage
-FROM node:lts-alpine as build-stage
+FROM node:lts-alpine3.14 as build-stage
 WORKDIR /app
 COPY package.json ./
 RUN npm install
@@ -7,7 +7,7 @@ COPY . .
 RUN npm run build
 
 # production stage
-FROM nginx:stable-alpine as production-stage
+FROM nginx:1.20-alpine as production-stage
 COPY docker/nginx.conf.template /etc/nginx/templates/default.conf.template
 COPY --from=build-stage /app/dist /app
 COPY docker/config.json /app

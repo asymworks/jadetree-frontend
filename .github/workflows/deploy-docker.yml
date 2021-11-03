@@ -1,21 +1,53 @@
-name: Deploy Docker Images
+name: Build and Deploy Docker Images
 
 on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    tags: ['v*']
   release:
     types: [published]
 
 jobs:
   push_to_registry:
-    name: Deploy to Docker Hub
-    runs-on: ubuntu-latest
+    name: Build and Deploy Docker Images
+    runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Build and Publish
-      uses: docker/build-push-action@v1
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Docker Metadata
+      id: meta
+      uses: docker/metadata-action@v3
+      with:
+        images: asymworks/jadetree-frontend
+        flavor: latest=true
+        tags: |
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}-alpha
+          type=semver,pattern={{major}}-alpha
+          type=raw,value=0-alpha
+          type-raw,value=0.9-alpha
+
+    - uses: docker/setup-qemu-action@master
+      with:
+        platforms: all
+
+    - uses: docker/setup-buildx-action@v1
+
+    - name: Login to DockerHub
+      uses: docker/login-action@v1
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        repository: asymworks/jadetree-frontend
-        tag_with_ref: true
-        tags: 0-alpha,0.9-alpha
+
+    - name: Build and Publish
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: ${{ github.event_name == 'release' }}
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+        platforms: linux/amd64,linux/arm64/v8,linux/arm/v7,linux/arm/v6
